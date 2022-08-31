@@ -43,7 +43,6 @@ TGT_CFLAGS 	+= $(ARCH_FLAGS) $(addprefix -D, $(LIB_FLAGS))
 TGT_ASFLAGS += $(ARCH_FLAGS)
 # ld flags
 TGT_LDFLAGS += --specs=nano.specs -mcpu=cortex-m0 -mthumb -Wl,--gc-sections -Wl,-Map=$(BDIR)/$(PROJECT).map -Wl,--print-memory-usage
-#TGT_LDFLAGS += --specs=nano.specs -mcpu=cortex-m0 -mthumb -Wl,--gc-sections -Wl,-Map=$(BDIR)/$(PROJECT).map -Wl,--print-memory-usage,--cref --specs=nosys.specs -lc -lm -lnosys 
 
 # include paths
 TGT_INCFLAGS := $(addprefix -I $(TOP)/, $(INCLUDES))

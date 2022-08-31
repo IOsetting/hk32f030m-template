@@ -3,12 +3,12 @@ PROJECT 		?= app
 ARM_TOOCHAIN 	?= /opt/gcc-arm/gcc-arm-11.2-2022.02-x86_64-arm-none-eabi/bin
 # path to JLinkExe (or should be specified in PATH)
 JLINKEXE		?= /opt/SEGGER/JLink/JLinkExe
-# MCU type, HC32L110x4 or HC32L110x6
+# MCU type: HK32F030MD4P6, HK32F030MF4U6, HK32F030MF4P6 or HK32F030MJ4M6
 DEVICE			?= HK32F030MF4P6
 # The path for generated files
 BUILD_DIR 		= Build
 
-# Link descript file, hc32l110x4.ld or hc32l110x6.ld
+# Link descript file
 LDSCRIPT		= Libraries/LDScripts/hk32f030mf4p6.ld
 # Library build flags
 LIB_FLAGS       = HK32F030MF4P6
