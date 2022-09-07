@@ -4,74 +4,141 @@
   * @author  Alexander
   * @version V1.0
   * @date    2022-xx-xx
-  * @brief   测试led
+  * @brief   blink test
   ******************************************************************************
   */ 
 #include "hk32f030m.h" 
-#include "bsp_led.h"
+
+// LED1: PD1
+#define LED1_GPIO_PORT        GPIOD
+#define LED1_GPIO_CLK         RCC_AHBPeriph_GPIOD
+#define LED1_GPIO_PIN         GPIO_Pin_1
+// LED2: PC7
+#define LED2_GPIO_PORT        GPIOC
+#define LED2_GPIO_CLK         RCC_AHBPeriph_GPIOC
+#define LED2_GPIO_PIN         GPIO_Pin_7
+// LED3: PA2
+#define LED3_GPIO_PORT        GPIOA
+#define LED3_GPIO_CLK         RCC_AHBPeriph_GPIOA
+#define LED3_GPIO_PIN         GPIO_Pin_2
 
 #define SOFT_DELAY  Delay(0x0FFFFF);
 
 void Delay(__IO uint32_t nCount); 
 
 /**
-  * @brief  主函数
-  * @param  无  
-  * @retval 无
-  */
- 
-int main(void)
+ * @brief  初始化控制LED的IO
+ * @param  无
+ * @retval 无
+ */
+void LED_GPIO_Config(void)
 {
-	/* LED 端口初始化 */
-	LED_GPIO_Config();	
-  
-  while (1)
-	{
-    /* 定义控制IO的宏 */
-		LED1_ON;			  // 亮
-		SOFT_DELAY;
-		LED1_OFF;		   // 灭
+    GPIO_InitTypeDef GPIO_InitStructure;
+    // Enable AHB Clock
+    RCC_AHBPeriphClockCmd(LED1_GPIO_CLK | LED2_GPIO_CLK | LED3_GPIO_CLK, ENABLE);
+    
+    // LED1: Output, push-pull, speed 10Mhz
+    GPIO_InitStructure.GPIO_Pin = LED1_GPIO_PIN;
+    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
+    GPIO_Init(LED1_GPIO_PORT, &GPIO_InitStructure);
 
-		LED2_ON;			 // 亮
-		SOFT_DELAY;
-		LED2_OFF;		   // 灭
+    // LED2
+    GPIO_InitStructure.GPIO_Pin = LED2_GPIO_PIN;
+    GPIO_Init(LED2_GPIO_PORT, &GPIO_InitStructure);
 
-		LED3_ON;			 // 亮
-		SOFT_DELAY;
-		LED3_OFF;		   // 灭
+    // LED3
+    GPIO_InitStructure.GPIO_Pin = LED3_GPIO_PIN;
+    GPIO_Init(LED3_GPIO_PORT, &GPIO_InitStructure);
 
-    /* 使用标准的固件库控制IO*/
-    LED1(ON);			 // 亮
-		SOFT_DELAY;
-		LED1(OFF);		 // 灭
-    
-    LED1(ON);			 // 亮
-		SOFT_DELAY;
-		LED1(OFF);		 // 灭
-    
-    LED1(ON);			 // 亮
-		SOFT_DELAY;
-		LED1(OFF);		 // 灭
-    
-    /* 直接操作寄存器的方法控制IO */
-    digitalLo(LED1_GPIO_PORT,LED1_GPIO_PIN);
-		SOFT_DELAY;
-    digitalHi(LED1_GPIO_PORT,LED1_GPIO_PIN);
-    
-    digitalLo(LED2_GPIO_PORT,LED2_GPIO_PIN);
-		SOFT_DELAY;
-    digitalHi(LED2_GPIO_PORT,LED2_GPIO_PIN);
-    
-    digitalLo(LED3_GPIO_PORT,LED3_GPIO_PIN);
-		SOFT_DELAY;
-    digitalHi(LED3_GPIO_PORT,LED3_GPIO_PIN);
-    
-	}
+    // Turn off all
+    GPIO_ResetBits(LED1_GPIO_PORT, LED1_GPIO_PIN);
+    GPIO_ResetBits(LED2_GPIO_PORT, LED2_GPIO_PIN);
+    GPIO_ResetBits(LED3_GPIO_PORT, LED3_GPIO_PIN);
 }
 
-void Delay(__IO uint32_t nCount)	 //简单的延时函数
+int main(void)
 {
-	for(; nCount != 0; nCount--);
+    /* LED 端口初始化 */
+    LED_GPIO_Config();
+
+    while (1)
+    {
+        // LED1
+        GPIO_SetBits(LED1_GPIO_PORT, LED1_GPIO_PIN);
+        SOFT_DELAY;
+        GPIO_ResetBits(LED1_GPIO_PORT, LED1_GPIO_PIN);
+        // LED2
+        GPIO_SetBits(LED2_GPIO_PORT, LED2_GPIO_PIN);
+        SOFT_DELAY;
+        GPIO_ResetBits(LED2_GPIO_PORT, LED2_GPIO_PIN);
+        // LED3
+        GPIO_SetBits(LED3_GPIO_PORT, LED3_GPIO_PIN);
+        SOFT_DELAY;
+        GPIO_ResetBits(LED3_GPIO_PORT, LED3_GPIO_PIN);
+        SOFT_DELAY;
+        // All
+        GPIO_SetBits(LED1_GPIO_PORT, LED1_GPIO_PIN);
+        GPIO_SetBits(LED2_GPIO_PORT, LED2_GPIO_PIN);
+        GPIO_SetBits(LED3_GPIO_PORT, LED3_GPIO_PIN);
+        SOFT_DELAY;
+        GPIO_ResetBits(LED1_GPIO_PORT, LED1_GPIO_PIN);
+        GPIO_ResetBits(LED2_GPIO_PORT, LED2_GPIO_PIN);
+        GPIO_ResetBits(LED3_GPIO_PORT, LED3_GPIO_PIN);
+        SOFT_DELAY;
+
+        // LED1
+        GPIO_Toggle(LED1_GPIO_PORT, LED1_GPIO_PIN);
+        SOFT_DELAY;
+        GPIO_Toggle(LED1_GPIO_PORT, LED1_GPIO_PIN);
+        // LED2
+        GPIO_Toggle(LED2_GPIO_PORT, LED2_GPIO_PIN);
+        SOFT_DELAY;
+        GPIO_Toggle(LED2_GPIO_PORT, LED2_GPIO_PIN);
+        // LED3
+        GPIO_Toggle(LED3_GPIO_PORT, LED3_GPIO_PIN);
+        SOFT_DELAY;
+        GPIO_Toggle(LED3_GPIO_PORT, LED3_GPIO_PIN);
+        SOFT_DELAY;
+        // All
+        GPIO_Toggle(LED1_GPIO_PORT, LED1_GPIO_PIN);
+        GPIO_Toggle(LED2_GPIO_PORT, LED2_GPIO_PIN);
+        GPIO_Toggle(LED3_GPIO_PORT, LED3_GPIO_PIN);
+        SOFT_DELAY;
+        GPIO_Toggle(LED1_GPIO_PORT, LED1_GPIO_PIN);
+        GPIO_Toggle(LED2_GPIO_PORT, LED2_GPIO_PIN);
+        GPIO_Toggle(LED3_GPIO_PORT, LED3_GPIO_PIN);
+        SOFT_DELAY;
+
+        // LED1
+        LED1_GPIO_PORT->BSRR = LED1_GPIO_PIN;
+        SOFT_DELAY;
+        LED1_GPIO_PORT->BRR = LED1_GPIO_PIN;
+        // LED2
+        LED2_GPIO_PORT->BSRR = LED2_GPIO_PIN;
+        SOFT_DELAY;
+        LED2_GPIO_PORT->BRR = LED2_GPIO_PIN;
+        // LED3
+        LED3_GPIO_PORT->BSRR = LED3_GPIO_PIN;
+        SOFT_DELAY;
+        LED3_GPIO_PORT->BRR = LED3_GPIO_PIN;
+        SOFT_DELAY;
+        // All
+        LED1_GPIO_PORT->BSRR = LED1_GPIO_PIN;
+        LED2_GPIO_PORT->BSRR = LED2_GPIO_PIN;
+        LED3_GPIO_PORT->BSRR = LED3_GPIO_PIN;
+        SOFT_DELAY;
+        LED1_GPIO_PORT->BRR = LED1_GPIO_PIN;
+        LED2_GPIO_PORT->BRR = LED2_GPIO_PIN;
+        LED3_GPIO_PORT->BRR = LED3_GPIO_PIN;
+        SOFT_DELAY;
+    }
+}
+
+void Delay(__IO uint32_t nCount)     //简单的延时函数
+{
+    for(; nCount != 0; nCount--);
 }
 
 #ifdef  USE_FULL_ASSERT
@@ -85,11 +152,11 @@ void Delay(__IO uint32_t nCount)	 //简单的延时函数
 void assert_failed(char* file , uint32_t line)
 {
   /* User can add his own implementation to report the file name and line number,
-     tex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */	
+     tex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */    
        /* Infinite loop */
-	
-	while (1)
-  {		
+    
+    while (1)
+  {        
   }
 }
 #endif /* USE_FULL_ASSERT */

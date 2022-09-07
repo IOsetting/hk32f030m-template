@@ -9,7 +9,6 @@
 /* USER CODE END Header */
 
 /* Includes ------------------------------------------------------------------*/
-#include "main.h"
 #include "hk32f030m_it.h"
 #include "hk32f030m_tim.h"
 /* Private includes ----------------------------------------------------------*/
