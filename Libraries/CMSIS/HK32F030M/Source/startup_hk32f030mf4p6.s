@@ -137,10 +137,10 @@ g_pfnVectors:
   .word  0
   .word  0
   .word  PendSV_Handler
-  .word  SysTick_Handler
+  .word  SysTick_Handler  
   .word  WWDG_IRQHandler                   /* Window WatchDog              */
   .word  0                                 /* Reserved                     */
-  .word  RTC_IRQHandler                    /* RTC through the EXTI line    */
+  .word  EXTI11_IRQHandler                 /* EXTI Line 11 interrupt(AWU_WKP) */
   .word  FLASH_IRQHandler                  /* FLASH                        */
   .word  RCC_IRQHandler                    /* RCC                          */
   .word  EXTI0_IRQHandler                  /* EXTI Line 0                  */
@@ -149,16 +149,13 @@ g_pfnVectors:
   .word  EXTI3_IRQHandler                  /* EXTI Line 3                  */
   .word  EXTI4_IRQHandler                  /* EXTI Line 4                  */
   .word  EXTI5_IRQHandler                  /* EXTI Line 5                  */
-  .word  0                                 /* Reserved                     */
-  .word  DMA1_Channel1_IRQHandler          /* DMA1 Channel 1               */
-  .word  DMA1_Channel2_3_IRQHandler        /* DMA1 Channel 2 and Channel 3 */
-  .word  DMA1_Channel4_5_IRQHandler        /* DMA1 Channel 4 and Channel 5 */
-  .word  ADC1_IRQHandler                   /* ADC1                         */
-  .word  TIM1_BRK_UP_TRG_COM_IRQHandler    /* TIM1 Break, Update, Trigger and Commutation */
+  .word  TIM1_BRK_IRQHandler               /* TIM1 break interrupt         */
+  .word  ADC1_IRQHandler                   /* ADC1 interrupt(combined with EXTI line 8) */
+  .word  TIM1_UP_TRG_COM_IRQHandler        /* TIM1 Update, Trigger and Commutation */
   .word  TIM1_CC_IRQHandler                /* TIM1 Capture Compare         */
   .word  TIM2_IRQHandler                   /* TIM2                         */
   .word  0                                 /* Reserved                     */
-  .word  TIM6_IRQHandler                   /* TIM2                         */
+  .word  TIM6_IRQHandler                   /* TIM6                         */
   .word  0                                 /* Reserved                     */
   .word  0                                 /* Reserved                     */
   .word  0                                 /* Reserved                     */
@@ -200,8 +197,8 @@ g_pfnVectors:
   .weak      WWDG_IRQHandler
   .thumb_set WWDG_IRQHandler,Default_Handler
 
-  .weak      RTC_IRQHandler
-  .thumb_set RTC_IRQHandler,Default_Handler
+  .weak      EXTI11_IRQHandler
+  .thumb_set EXTI11_IRQHandler,Default_Handler
 
   .weak      FLASH_IRQHandler
   .thumb_set FLASH_IRQHandler,Default_Handler
@@ -227,20 +224,14 @@ g_pfnVectors:
   .weak      EXTI5_IRQHandler
   .thumb_set EXTI5_IRQHandler,Default_Handler
 
-  .weak      DMA1_Channel1_IRQHandler
-  .thumb_set DMA1_Channel1_IRQHandler,Default_Handler
-
-  .weak      DMA1_Channel2_3_IRQHandler
-  .thumb_set DMA1_Channel2_3_IRQHandler,Default_Handler
-
-  .weak      DMA1_Channel4_5_IRQHandler
-  .thumb_set DMA1_Channel4_5_IRQHandler,Default_Handler
+  .weak      TIM1_BRK_IRQHandler
+  .thumb_set TIM1_BRK_IRQHandler,Default_Handler
 
   .weak      ADC1_IRQHandler
   .thumb_set ADC1_IRQHandler,Default_Handler
 
-  .weak      TIM1_BRK_UP_TRG_COM_IRQHandler
-  .thumb_set TIM1_BRK_UP_TRG_COM_IRQHandler,Default_Handler
+  .weak      TIM1_UP_TRG_COM_IRQHandler
+  .thumb_set TIM1_UP_TRG_COM_IRQHandler,Default_Handler
 
   .weak      TIM1_CC_IRQHandler
   .thumb_set TIM1_CC_IRQHandler,Default_Handler
