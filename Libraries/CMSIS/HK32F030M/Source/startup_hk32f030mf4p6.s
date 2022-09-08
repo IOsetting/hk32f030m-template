@@ -1,27 +1,14 @@
 /**
   ******************************************************************************
-  * @file      startup_stm32f030x6.s
-  * @author    MCD Application Team
-  * @brief     STM32F030x4/STM32F030x6 devices vector table for GCC toolchain.
+  * @file      startup_hk32f030mf4p6.s
+  * @brief     HK32F030MF4P6 devices vector table for GCC toolchain.
   *            This module performs:
   *                - Set the initial SP
   *                - Set the initial PC == Reset_Handler,
   *                - Set the vector table entries with the exceptions ISR address
-  *                - Branches to main in the C library (which eventually
-  *                  calls main()).
+  *                - Branches to main in the C library (which eventually calls main()).
   *            After Reset the Cortex-M0 processor is in Thread mode,
   *            priority is Privileged, and the Stack is set to Main.
-  ******************************************************************************
-  * @attention
-  *
-  * <h2><center>&copy; Copyright (c) 2016 STMicroelectronics.
-  * All rights reserved.</center></h2>
-  *
-  * This software component is licensed by ST under BSD 3-Clause license,
-  * the "License"; You may not use this file except in compliance with the
-  * License. You may obtain a copy of the License at:
-  *                        opensource.org/licenses/BSD-3-Clause
-  *
   ******************************************************************************
   */
 
@@ -150,7 +137,7 @@ g_pfnVectors:
   .word  EXTI4_IRQHandler                  /* EXTI Line 4                  */
   .word  EXTI5_IRQHandler                  /* EXTI Line 5                  */
   .word  TIM1_BRK_IRQHandler               /* TIM1 break interrupt         */
-  .word  ADC1_IRQHandler                   /* ADC1 interrupt(combined with EXTI line 8) */
+  .word  ADC1_IRQHandler                   /* ADC1 interrupt, combined with EXTI line 8 */
   .word  TIM1_UP_TRG_COM_IRQHandler        /* TIM1 Update, Trigger and Commutation */
   .word  TIM1_CC_IRQHandler                /* TIM1 Capture Compare         */
   .word  TIM2_IRQHandler                   /* TIM2                         */
@@ -159,13 +146,13 @@ g_pfnVectors:
   .word  0                                 /* Reserved                     */
   .word  0                                 /* Reserved                     */
   .word  0                                 /* Reserved                     */
-  .word  EXTI6_IRQHandler                  /* EXTI Line 6                        */
-  .word  EXTI7_IRQHandler                  /* EXTI Line 7                        */
-  .word  I2C1_IRQHandler                   /* I2C1                         */
+  .word  EXTI6_IRQHandler                  /* EXTI Line 6                  */
+  .word  EXTI7_IRQHandler                  /* EXTI Line 7                  */
+  .word  I2C1_IRQHandler                   /* I2C1 global interrupt, combined with EXTI Line 10 */
   .word  0                                 /* Reserved                     */
   .word  SPI1_IRQHandler                   /* SPI1                         */
   .word  0                                 /* Reserved                     */
-  .word  USART1_IRQHandler                 /* USART1                       */
+  .word  USART1_IRQHandler                 /* USART1 global interrupt, combined with EXTI Line 9 */
   .word  0                                 /* Reserved                     */
   .word  0                                 /* Reserved                     */
   .word  0                                 /* Reserved                     */
@@ -256,6 +243,3 @@ g_pfnVectors:
 
   .weak      USART1_IRQHandler
   .thumb_set USART1_IRQHandler,Default_Handler
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-
