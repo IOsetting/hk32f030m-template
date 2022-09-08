@@ -7,7 +7,8 @@
   * @brief   blink test
   ******************************************************************************
   */ 
-#include "hk32f030m.h" 
+#include "hk32f030m.h"
+#include "systick_delay.h"
 
 // LED1: PD1
 #define LED1_GPIO_PORT        GPIOD
@@ -22,10 +23,6 @@
 #define LED3_GPIO_CLK         RCC_AHBPeriph_GPIOA
 #define LED3_GPIO_PIN         GPIO_Pin_2
 
-#define SOFT_DELAY  Delay(0x0FFFFF);
-
-void Delay(__IO uint32_t nCount); 
-
 /**
  * @brief  初始化控制LED的IO
  * @param  无
@@ -33,112 +30,108 @@ void Delay(__IO uint32_t nCount);
  */
 void LED_GPIO_Config(void)
 {
-    GPIO_InitTypeDef GPIO_InitStructure;
-    // Enable AHB Clock
-    RCC_AHBPeriphClockCmd(LED1_GPIO_CLK | LED2_GPIO_CLK | LED3_GPIO_CLK, ENABLE);
-    
-    // LED1: Output, push-pull, speed 10Mhz
-    GPIO_InitStructure.GPIO_Pin = LED1_GPIO_PIN;
-    GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
-    GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
-    GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
-    GPIO_Init(LED1_GPIO_PORT, &GPIO_InitStructure);
+  GPIO_InitTypeDef GPIO_InitStructure;
+  // Enable AHB Clock
+  RCC_AHBPeriphClockCmd(LED1_GPIO_CLK | LED2_GPIO_CLK | LED3_GPIO_CLK, ENABLE);
 
-    // LED2
-    GPIO_InitStructure.GPIO_Pin = LED2_GPIO_PIN;
-    GPIO_Init(LED2_GPIO_PORT, &GPIO_InitStructure);
+  // LED1: Output, push-pull, speed 10Mhz
+  GPIO_InitStructure.GPIO_Pin = LED1_GPIO_PIN;
+  GPIO_InitStructure.GPIO_Mode = GPIO_Mode_OUT;
+  GPIO_InitStructure.GPIO_OType = GPIO_OType_PP;
+  GPIO_InitStructure.GPIO_Speed = GPIO_Speed_10MHz;
+  GPIO_Init(LED1_GPIO_PORT, &GPIO_InitStructure);
 
-    // LED3
-    GPIO_InitStructure.GPIO_Pin = LED3_GPIO_PIN;
-    GPIO_Init(LED3_GPIO_PORT, &GPIO_InitStructure);
+  // LED2
+  GPIO_InitStructure.GPIO_Pin = LED2_GPIO_PIN;
+  GPIO_Init(LED2_GPIO_PORT, &GPIO_InitStructure);
 
-    // Turn off all
-    GPIO_ResetBits(LED1_GPIO_PORT, LED1_GPIO_PIN);
-    GPIO_ResetBits(LED2_GPIO_PORT, LED2_GPIO_PIN);
-    GPIO_ResetBits(LED3_GPIO_PORT, LED3_GPIO_PIN);
+  // LED3
+  GPIO_InitStructure.GPIO_Pin = LED3_GPIO_PIN;
+  GPIO_Init(LED3_GPIO_PORT, &GPIO_InitStructure);
+
+  // Turn off all
+  GPIO_ResetBits(LED1_GPIO_PORT, LED1_GPIO_PIN);
+  GPIO_ResetBits(LED2_GPIO_PORT, LED2_GPIO_PIN);
+  GPIO_ResetBits(LED3_GPIO_PORT, LED3_GPIO_PIN);
 }
 
 int main(void)
 {
-    /* LED 端口初始化 */
-    LED_GPIO_Config();
+  SysTick_Init();
+  /* LED 端口初始化 */
+  LED_GPIO_Config();
 
-    while (1)
-    {
-        // LED1
-        GPIO_SetBits(LED1_GPIO_PORT, LED1_GPIO_PIN);
-        SOFT_DELAY;
-        GPIO_ResetBits(LED1_GPIO_PORT, LED1_GPIO_PIN);
-        // LED2
-        GPIO_SetBits(LED2_GPIO_PORT, LED2_GPIO_PIN);
-        SOFT_DELAY;
-        GPIO_ResetBits(LED2_GPIO_PORT, LED2_GPIO_PIN);
-        // LED3
-        GPIO_SetBits(LED3_GPIO_PORT, LED3_GPIO_PIN);
-        SOFT_DELAY;
-        GPIO_ResetBits(LED3_GPIO_PORT, LED3_GPIO_PIN);
-        SOFT_DELAY;
-        // All
-        GPIO_SetBits(LED1_GPIO_PORT, LED1_GPIO_PIN);
-        GPIO_SetBits(LED2_GPIO_PORT, LED2_GPIO_PIN);
-        GPIO_SetBits(LED3_GPIO_PORT, LED3_GPIO_PIN);
-        SOFT_DELAY;
-        GPIO_ResetBits(LED1_GPIO_PORT, LED1_GPIO_PIN);
-        GPIO_ResetBits(LED2_GPIO_PORT, LED2_GPIO_PIN);
-        GPIO_ResetBits(LED3_GPIO_PORT, LED3_GPIO_PIN);
-        SOFT_DELAY;
+  while (1)
+  {
+    // LED1
+    GPIO_SetBits(LED1_GPIO_PORT, LED1_GPIO_PIN);
+    SysTick_DelayMs(500);
+    GPIO_ResetBits(LED1_GPIO_PORT, LED1_GPIO_PIN);
+    // LED2
+    GPIO_SetBits(LED2_GPIO_PORT, LED2_GPIO_PIN);
+    SysTick_DelayMs(500);
+    GPIO_ResetBits(LED2_GPIO_PORT, LED2_GPIO_PIN);
+    // LED3
+    GPIO_SetBits(LED3_GPIO_PORT, LED3_GPIO_PIN);
+    SysTick_DelayMs(500);
+    GPIO_ResetBits(LED3_GPIO_PORT, LED3_GPIO_PIN);
+    SysTick_DelayMs(500);
+    // All
+    GPIO_SetBits(LED1_GPIO_PORT, LED1_GPIO_PIN);
+    GPIO_SetBits(LED2_GPIO_PORT, LED2_GPIO_PIN);
+    GPIO_SetBits(LED3_GPIO_PORT, LED3_GPIO_PIN);
+    SysTick_DelayMs(500);
+    GPIO_ResetBits(LED1_GPIO_PORT, LED1_GPIO_PIN);
+    GPIO_ResetBits(LED2_GPIO_PORT, LED2_GPIO_PIN);
+    GPIO_ResetBits(LED3_GPIO_PORT, LED3_GPIO_PIN);
+    SysTick_DelayMs(500);
 
-        // LED1
-        GPIO_Toggle(LED1_GPIO_PORT, LED1_GPIO_PIN);
-        SOFT_DELAY;
-        GPIO_Toggle(LED1_GPIO_PORT, LED1_GPIO_PIN);
-        // LED2
-        GPIO_Toggle(LED2_GPIO_PORT, LED2_GPIO_PIN);
-        SOFT_DELAY;
-        GPIO_Toggle(LED2_GPIO_PORT, LED2_GPIO_PIN);
-        // LED3
-        GPIO_Toggle(LED3_GPIO_PORT, LED3_GPIO_PIN);
-        SOFT_DELAY;
-        GPIO_Toggle(LED3_GPIO_PORT, LED3_GPIO_PIN);
-        SOFT_DELAY;
-        // All
-        GPIO_Toggle(LED1_GPIO_PORT, LED1_GPIO_PIN);
-        GPIO_Toggle(LED2_GPIO_PORT, LED2_GPIO_PIN);
-        GPIO_Toggle(LED3_GPIO_PORT, LED3_GPIO_PIN);
-        SOFT_DELAY;
-        GPIO_Toggle(LED1_GPIO_PORT, LED1_GPIO_PIN);
-        GPIO_Toggle(LED2_GPIO_PORT, LED2_GPIO_PIN);
-        GPIO_Toggle(LED3_GPIO_PORT, LED3_GPIO_PIN);
-        SOFT_DELAY;
+    // LED1
+    GPIO_Toggle(LED1_GPIO_PORT, LED1_GPIO_PIN);
+    SysTick_DelayMs(500);
+    GPIO_Toggle(LED1_GPIO_PORT, LED1_GPIO_PIN);
+    // LED2
+    GPIO_Toggle(LED2_GPIO_PORT, LED2_GPIO_PIN);
+    SysTick_DelayMs(500);
+    GPIO_Toggle(LED2_GPIO_PORT, LED2_GPIO_PIN);
+    // LED3
+    GPIO_Toggle(LED3_GPIO_PORT, LED3_GPIO_PIN);
+    SysTick_DelayMs(500);
+    GPIO_Toggle(LED3_GPIO_PORT, LED3_GPIO_PIN);
+    SysTick_DelayMs(500);
+    // All
+    GPIO_Toggle(LED1_GPIO_PORT, LED1_GPIO_PIN);
+    GPIO_Toggle(LED2_GPIO_PORT, LED2_GPIO_PIN);
+    GPIO_Toggle(LED3_GPIO_PORT, LED3_GPIO_PIN);
+    SysTick_DelayMs(500);
+    GPIO_Toggle(LED1_GPIO_PORT, LED1_GPIO_PIN);
+    GPIO_Toggle(LED2_GPIO_PORT, LED2_GPIO_PIN);
+    GPIO_Toggle(LED3_GPIO_PORT, LED3_GPIO_PIN);
+    SysTick_DelayMs(500);
 
-        // LED1
-        LED1_GPIO_PORT->BSRR = LED1_GPIO_PIN;
-        SOFT_DELAY;
-        LED1_GPIO_PORT->BRR = LED1_GPIO_PIN;
-        // LED2
-        LED2_GPIO_PORT->BSRR = LED2_GPIO_PIN;
-        SOFT_DELAY;
-        LED2_GPIO_PORT->BRR = LED2_GPIO_PIN;
-        // LED3
-        LED3_GPIO_PORT->BSRR = LED3_GPIO_PIN;
-        SOFT_DELAY;
-        LED3_GPIO_PORT->BRR = LED3_GPIO_PIN;
-        SOFT_DELAY;
-        // All
-        LED1_GPIO_PORT->BSRR = LED1_GPIO_PIN;
-        LED2_GPIO_PORT->BSRR = LED2_GPIO_PIN;
-        LED3_GPIO_PORT->BSRR = LED3_GPIO_PIN;
-        SOFT_DELAY;
-        LED1_GPIO_PORT->BRR = LED1_GPIO_PIN;
-        LED2_GPIO_PORT->BRR = LED2_GPIO_PIN;
-        LED3_GPIO_PORT->BRR = LED3_GPIO_PIN;
-        SOFT_DELAY;
-    }
-}
-
-void Delay(__IO uint32_t nCount)     //简单的延时函数
-{
-    for(; nCount != 0; nCount--);
+    // LED1
+    LED1_GPIO_PORT->BSRR = LED1_GPIO_PIN;
+    SysTick_DelayMs(500);
+    LED1_GPIO_PORT->BRR = LED1_GPIO_PIN;
+    // LED2
+    LED2_GPIO_PORT->BSRR = LED2_GPIO_PIN;
+    SysTick_DelayMs(500);
+    LED2_GPIO_PORT->BRR = LED2_GPIO_PIN;
+    // LED3
+    LED3_GPIO_PORT->BSRR = LED3_GPIO_PIN;
+    SysTick_DelayMs(500);
+    LED3_GPIO_PORT->BRR = LED3_GPIO_PIN;
+    SysTick_DelayMs(500);
+    // All
+    LED1_GPIO_PORT->BSRR = LED1_GPIO_PIN;
+    LED2_GPIO_PORT->BSRR = LED2_GPIO_PIN;
+    LED3_GPIO_PORT->BSRR = LED3_GPIO_PIN;
+    SysTick_DelayMs(500);
+    LED1_GPIO_PORT->BRR = LED1_GPIO_PIN;
+    LED2_GPIO_PORT->BRR = LED2_GPIO_PIN;
+    LED3_GPIO_PORT->BRR = LED3_GPIO_PIN;
+    SysTick_DelayMs(500);
+  }
 }
 
 #ifdef  USE_FULL_ASSERT
@@ -160,5 +153,3 @@ void assert_failed(char* file , uint32_t line)
   }
 }
 #endif /* USE_FULL_ASSERT */
-
-

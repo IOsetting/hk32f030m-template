@@ -16,7 +16,8 @@ LIB_FLAGS       = HK32F030MF4P6
 # C source folders
 CDIRS	:= User \
 		Libraries/CMSIS/HK32F030M/Source \
-		Libraries/HK32F030M_Driver/src
+		Libraries/HK32F030M_Driver/src \
+		Libraries/Debug
 # C source files (if there are any single ones)
 CFILES := 
 
@@ -29,6 +30,7 @@ AFILES	:= Libraries/CMSIS/HK32F030M/Source/startup_hk32f030mf4p6.s
 INCLUDES	:= Libraries/CMSIS/CM0/Core \
 			Libraries/CMSIS/HK32F030M/Include \
 			Libraries/HK32F030M_Driver/inc \
+			Libraries/Debug \
 			User
 
 include ./rules.mk
