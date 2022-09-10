@@ -1,10 +1,7 @@
 /**
   ******************************************************************************
   * @file    main.c
-  * @author  Alexander
-  * @version V1.0
-  * @date    2022-xx-xx
-  * @brief   高级定时器-PWM互补输出带死区时间
+  * @brief   Timer1 Complementary Output
   ******************************************************************************
   */ 
 #include "hk32f030m.h"
@@ -34,8 +31,7 @@ static void PWM_GPIO_Init(void)
   GPIO_Init(GPIOA, &GPIO_InitStructure);
 }
 
-/* ----------------   PWM Period and duty cycle  --------------- 
-ARR ：自动重装载寄存器的值
+/* ----------------   PWM Period And Duty Cycle  --------------- 
 TIM_CLK = FCLK / (PSC+1)
 PWM Frequency = FCLK / (PSC+1) / (ARR+1)
 Duty Cycle = CCR1 / (ARR+1)
@@ -111,8 +107,7 @@ void assert_failed(char* file , uint32_t line)
 {
   /* User can add his own implementation to report the file name and line number,
      tex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */	
-       /* Infinite loop */
-	
+  /* Infinite loop */
 	while (1)
   {		
   }
