@@ -103,16 +103,13 @@ void SPIx_Config(void)
 
 uint8_t SPI_TxRxByte(uint8_t byte)
 {
-  uint32_t spixbase = 0x00;
 	SPITimeout = SPIT_FLAG_TIMEOUT;
   /* Check the status of Transmit buffer Empty flag */
   while ((SPI1->SR & SPI_I2S_FLAG_TXE) == (uint16_t)RESET)
   {
     if((SPITimeout--) == 0) return Timeout_Callback(0);
   }
-  spixbase = (uint32_t)SPI1;
-  spixbase += 0x0C;
-  *(__IO uint8_t *) spixbase = byte;
+  *(__IO uint8_t *)(&(SPI1->DR)) = byte;
 
 	SPITimeout = SPIT_FLAG_TIMEOUT;
   while ((SPI1->SR & SPI_I2S_FLAG_TXE) == (uint16_t)RESET)
@@ -120,7 +117,7 @@ uint8_t SPI_TxRxByte(uint8_t byte)
     if((SPITimeout--) == 0) return Timeout_Callback(0);
   }
   // Read from RX buffer
-  return *(__IO uint8_t *) spixbase;
+  return *(__IO uint8_t *)(&(SPI1->DR));
 }
 
 void MAX7219_write(uint8_t addr, uint8_t dat)
