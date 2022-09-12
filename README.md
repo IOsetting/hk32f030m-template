@@ -4,7 +4,7 @@ A build template for projects using HK32F030MF4P6 MCU and GNU Arm Embedded Toolc
 
 # HK32F030MF4P6
 
-## Pinout
+## Pinout - TSSOP20
 
 | Pin | Func          | Pin | Func             |
 | -- | -------------- | -- | ----------------- |
