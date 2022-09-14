@@ -9,7 +9,7 @@ DEVICE			?= HK32F030MF4P6
 BUILD_DIR 		= Build
 
 # Link descript file
-LDSCRIPT		= Libraries/LDScripts/hk32f030mf4p6.ld
+LDSCRIPT		= Libraries/LDScripts/hk32f030mf4p6_lite.ld
 # Library build flags
 LIB_FLAGS       = HK32F030MF4P6
 
@@ -24,7 +24,7 @@ CFILES :=
 # ASM source folders
 ADIRS	:= User
 # ASM single files
-AFILES	:= Libraries/CMSIS/HK32F030M/Source/startup_hk32f030mf4p6.s
+AFILES	:=
 
 # Include paths
 INCLUDES	:= Libraries/CMSIS/CM0/Core \

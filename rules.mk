@@ -44,7 +44,7 @@ TGT_ASFLAGS += $(ARCH_FLAGS)
 # ld flags
 TGT_LDFLAGS += --specs=nosys.specs -mcpu=cortex-m0 -mthumb -Wl,--gc-sections -Wl,-Map=$(BDIR)/$(PROJECT).map -Wl,--print-memory-usage
 TGT_LDFLAGS += --specs=nano.specs # Use newlib-nano instead of newlib for smaller flash size
-#TGT_LDFLAGS += -nostartfiles # Exclude standard initialization actions
+TGT_LDFLAGS += -nostartfiles  # Exclude standard initialization actions
 
 
 # include paths
