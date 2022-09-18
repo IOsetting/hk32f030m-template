@@ -37,17 +37,23 @@ OPT			?= -Os
 CSTD		?= -std=c99
 ARCH_FLAGS	:= -fno-common -mcpu=cortex-m0 -mthumb
 
-# c flags
+### c flags ###
 TGT_CFLAGS 	+= $(ARCH_FLAGS) $(addprefix -D, $(LIB_FLAGS))
-# asm flags
+
+### asm flags ###
 TGT_ASFLAGS += $(ARCH_FLAGS)
-# ld flags
+
+### ld flags ###
 TGT_LDFLAGS += --specs=nosys.specs -mcpu=cortex-m0 -mthumb -Wl,--gc-sections -Wl,-Map=$(BDIR)/$(PROJECT).map -Wl,--print-memory-usage
-TGT_LDFLAGS += --specs=nano.specs # Use newlib-nano instead of newlib for smaller flash size
-TGT_LDFLAGS += -nostartfiles  # Exclude standard initialization actions
+ # Use newlib-nano instead of newlib for smaller flash size
+TGT_LDFLAGS += --specs=nano.specs
+ # Exclude standard initialization actions, when __libc_init_array exists, this should be omit, \
+   otherwise it will generate "undefined reference to `_init'" error. \
+   **Remove** `bl __libc_init_array` from startup.s if you want to enable this.
+# TGT_LDFLAGS += -nostartfiles
 
 
-# include paths
+### included paths ###
 TGT_INCFLAGS := $(addprefix -I $(TOP)/, $(INCLUDES))
 
 

@@ -4,10 +4,8 @@
 **  File        : LinkerScript.ld
 **
 **  Abstract    : Linker script for HK32F030Mx series
-**
 **                Set heap size, stack size and stack location according
 **                to application requirements.
-**
 **                Set memory bank area and size if external memory is used.
 **
 **  Distribution: The file is distributed “as is,” without any warranty
@@ -21,15 +19,18 @@ ENTRY(Reset_Handler)
 
 /* Highest address of the user mode stack */
 _estack = ORIGIN(RAM) + LENGTH(RAM);    /* end of RAM */
-/* Generate a link error if heap and stack don't fit into RAM */
-_Min_Heap_Size = 0x200;      /* required amount of heap  */
-_Min_Stack_Size = 0x400; /* required amount of stack */
+/*
+  Generate a link error if heap and stack don't fit into RAM.
+  These numbers affect the USED size of RAM
+*/
+_Min_Heap_Size = 0x200;   /* required amount of heap: 512 bytes */
+_Min_Stack_Size = 0x400;  /* required amount of stack: 1024 bytes */
 
 /* Specify the memory areas */
 MEMORY
 {
   RAM (xrw)      : ORIGIN = 0x20000000, LENGTH = 4K
-  FLASH (rx)     : ORIGIN =  0x8000000, LENGTH = 16K
+  FLASH (rx)     : ORIGIN = 0x08000000, LENGTH = 16K
 }
 
 /* Define output sections */
@@ -139,8 +140,6 @@ SECTIONS
     . = . + _Min_Stack_Size;
     . = ALIGN(8);
   } >RAM
-
-  
 
   /* Remove information from the standard libraries */
   /DISCARD/ :

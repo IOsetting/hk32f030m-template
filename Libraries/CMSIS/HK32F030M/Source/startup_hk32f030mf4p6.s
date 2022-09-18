@@ -72,7 +72,7 @@ LoopFillZerobss:
 
 /* Call the clock system intitialization function.*/
   bl  SystemInit
-/* Call static constructors */
+/* Call static constructors. Remove this line if compile with `-nostartfiles` reports error */
   bl __libc_init_array
 /* Call the application's entry point.*/
   bl main
