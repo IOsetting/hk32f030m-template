@@ -1,6 +1,4 @@
 .vscode/
 Build/
-Libraries/HK32F030M_Driver/inc
-Libraries/HK32F030M_Driver/src
 Temp*
 *.d
