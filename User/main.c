@@ -23,11 +23,6 @@
 #define LED3_GPIO_CLK         RCC_AHBPeriph_GPIOA
 #define LED3_GPIO_PIN         GPIO_Pin_2
 
-/**
- * @brief  初始化控制LED的IO
- * @param  无
- * @retval 无
- */
 void LED_GPIO_Config(void)
 {
   GPIO_InitTypeDef GPIO_InitStructure;
