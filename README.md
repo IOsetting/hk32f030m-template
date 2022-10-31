@@ -43,9 +43,6 @@ A build template for projects using HK32F030MF4P6 MCU and GNU Arm Embedded Toolc
 * JLink OB programmer
 * SEGGER J-Link Software and Documentation pack [https://www.segger.com/downloads/jlink/](https://www.segger.com/downloads/jlink/)
 * GNU Arm Embedded Toolchain
-* HK32F030MF4P6_Fwlib-Template.zip download from
-  * [https://bbs.21ic.com/icview-3236132-1-1.html](https://bbs.21ic.com/icview-3236132-1-1.html)
-
 
 # Building
 
@@ -74,26 +71,6 @@ The default installation directory is */opt/SEGGER*
 Clone this repository to local workspace
 ```bash
 git clone https://github.com/IOsetting/hk32f030m-template.git
-```
-Uncompress HK32F030MF4P6_Fwlib-Template.zip and copy files under Source/Libraries/HK32F030M_Lib/ to 
-Libraries/HK32F030M_Driver, make the file structure looks like
-```
-├── Build
-├── Examples
-├── flash.jlink
-├── Libraries
-│   ├── CMSIS
-│   ├── Debug
-│   ├── HK32F030M_Driver
-│   │   ├── inc
-│   │   │   ├── hk32f030m_adc.h
-│   │   │   ├── ...
-│   │   │   └── hk32f030m_wwdg.h
-│   │   └── src
-│   │       ├── hk32f030m_adc.c
-│   │       ├── ...
-│   │       └── hk32f030m_wwdg.c
-│   └── LDScripts
 ```
 
 ## 4. Edit Makefile
@@ -137,3 +114,4 @@ Replace the source files of *User* folder with the source files from other examp
 
 * Product Page: [https://www.hsxp-hk.com/product/98.html](https://www.hsxp-hk.com/product/98.html)
 * Datasheet(Chinese) and User Manual(Chinese) Download: [https://www.hsxp-hk.com/companyfile/155/](https://www.hsxp-hk.com/companyfile/155/)
+* HK32F030MF4P6_Fwlib-Template.zip downloads [https://bbs.21ic.com/icview-3236132-1-1.html](https://bbs.21ic.com/icview-3236132-1-1.html)
