@@ -9,7 +9,7 @@ BUILD_DIR 		= Build
 
 # Enable printf float %f support, y:yes, n:no
 ENABLE_PRINTF_FLOAT	?= n
-# Programmer, jlink
+# Programmer, jlink or pyocd
 FLASH_PROGRM	?= jlink
 
 
@@ -22,8 +22,12 @@ ARM_TOOCHAIN 	?= /opt/gcc-arm/arm-gnu-toolchain-12.2.mpacbti-bet1-x86_64-arm-non
 
 # path to JLinkExe
 JLINKEXE		?= /opt/SEGGER/JLink/JLinkExe
-# MCU type: HK32F030MD4P6, HK32F030MF4U6, HK32F030MF4P6 or HK32F030MJ4M6
+# JLink device type: HK32F030MD4P6, HK32F030MF4U6, HK32F030MF4P6 or HK32F030MJ4M6
 JLINK_DEVICE	?= HK32F030MF4P6
+# path to PyOCD
+PYOCD_EXE		?= pyocd
+# PyOCD device type: hk32f030md4p6, hk32f030mf4p6, hk32f030mf4u6, hk32f030mj4m6
+PYOCD_DEVICE	?= hk32f030mf4p6
 
 
 ##### Paths ############
