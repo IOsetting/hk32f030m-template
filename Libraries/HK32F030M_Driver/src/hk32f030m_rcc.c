@@ -606,6 +606,7 @@ void RCC_GetClocksFreq(RCC_ClocksTypeDef* RCC_Clocks)
 
 		case 0x0C:  /* LSI used as system clock */
 			RCC_Clocks->SYSCLK_Frequency = LSI_VALUE;
+			break;
 			
 		default: /* HSI used as system clock */
 			RCC_Clocks->SYSCLK_Frequency = HSI_VALUE;
