@@ -230,7 +230,7 @@ static void SetSysClockToHSI_16M(void)
 		/* Flash wait state */
 		ACRreg = FLASH->ACR;
 		ACRreg &= (uint32_t)((uint32_t)~FLASH_ACR_LATENCY);
-		FLASH->ACR = (uint32_t)(FLASH_Latency_1|ACRreg);	
+		FLASH->ACR = (uint32_t)(FLASH_Latency_0|ACRreg);	
 
 		RCCHCLKReg = RCC->CFGR;
 		RCCHCLKReg &= (uint32_t)((uint32_t)~RCC_CFGR_HPRE_Msk);
@@ -289,7 +289,7 @@ static void SetSysClockToHSI_32M(void)
 		/* Flash wait state */
 		ACRreg = FLASH->ACR;
 		ACRreg &= (uint32_t)((uint32_t)~FLASH_ACR_LATENCY);
-		FLASH->ACR = (uint32_t)(FLASH_Latency_2|ACRreg);	
+		FLASH->ACR = (uint32_t)(FLASH_Latency_1|ACRreg);	
 
 
 		RCCHCLKReg = RCC->CFGR;
