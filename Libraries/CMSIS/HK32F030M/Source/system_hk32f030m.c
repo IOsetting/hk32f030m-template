@@ -36,8 +36,6 @@
 #define SYSCLK_SRC_LSI			0x5
 #define SYSCLK_SCR_EXTCLK_IO	0x6
 
-#define SYSCLK_SOURCE	SYSCLK_SRC_HSI32M
-
 // #define VECT_TAB_SRAM
 #define VECT_TAB_OFFSET  0x0 /*!< Vector Table base offset field. This value must be a multiple of 0x200. */
 
