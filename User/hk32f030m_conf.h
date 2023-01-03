@@ -17,6 +17,14 @@
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 
+/* System clock selection  */
+ 
+//#define SYSCLK_SOURCE SYSCLK_SRC_HSI8M
+//#define SYSCLK_SOURCE SYSCLK_SRC_HSI16M
+#define SYSCLK_SOURCE SYSCLK_SCR_HSI32M
+//#define SYSCLK_SOURCE SYSCLK_SRC_LSI
+//#define SYSCLK_SOURCE SYSCLK_SCR_EXTCLK_IO
+	 
 /* ########################## HSE/HSI Values adaptation ##################### */
 /**
   * @brief Adjust the value of External High Speed oscillator (HSE) used in your application.
