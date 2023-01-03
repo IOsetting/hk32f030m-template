@@ -31,11 +31,19 @@ MEMORY
 {
   RAM (xrw)      : ORIGIN = 0x20000000, LENGTH = 4K
   FLASH (rx)     : ORIGIN = 0x08000000, LENGTH = 16K
+  EEPROM (rx)    : ORIGIN = 0x0C000000, LENGTH = 448
 }
 
 /* Define output sections */
 SECTIONS
 {
+  .eeprom :
+  {
+    . = ALIGN(4);
+    KEEP(*(.eeprom))	/* .eeprom section */
+    . = ALIGN(4);
+  } >EEPROM
+  
   /* The startup code goes first into FLASH */
   .isr_vector :
   {
