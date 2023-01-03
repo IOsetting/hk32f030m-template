@@ -65,7 +65,7 @@
 
 
 /* Provide a weak function to handle system clock failure*/
-__weak void clockFailure(void){
+__attribute__((weak)) void clockFailure(void){
 	NVIC_SystemReset();     		/* Timeout reached, oscillator not working, reset system */
 }
 
