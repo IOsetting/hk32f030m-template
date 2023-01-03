@@ -65,6 +65,12 @@
 	static void SetSysClockToEXTCLK(void);	
 #endif
 
+
+/* Provide a weak function to handle system clock failure*/
+__weak void clockFailure(void){
+	NVIC_SystemReset();     		/* Timeout reached, oscillator not working, reset system */
+}
+
 static void SetSysClock(void);
 
 /**
@@ -141,234 +147,168 @@ static void SetSysClock(void)
 #if(SYSCLK_SOURCE==SYSCLK_SRC_HSI8M)
 static void SetSysClockToHSI_8M(void)
 {
-	__IO uint32_t StartUpCounter = 0, HSIStatus = 0;
+	__IO uint32_t StartUpCounter = 0;
 	__IO uint32_t ACRreg = 0;
 	__IO uint32_t RCCHCLKReg = 0;	
 	__IO uint32_t RCCPCLKReg = 0;		
 	/* Enable HSI */
-    RCC->CR |= RCC_CR_HSION;
+    	RCC->CR |= RCC_CR_HSION;
 
 	RCC->CFGR4 &= ~RCC_RCC_CFGR4_FLITFCLK_PRE;
 	RCC->CFGR4 |= (((uint32_t)0x07) << RCC_RCC_CFGR4_FLITFCLK_PRE_Pos);
-
-	/* Wait till HSI is ready and if Time out is reached exit */
-	do{
-		HSIStatus = RCC->CR & RCC_CR_HSIRDY;
-		StartUpCounter++;  
-	} while((HSIStatus == 0) && (StartUpCounter != STARTUP_TIMEOUT));
-
-	if ((RCC->CR & RCC_CR_HSIRDY) != RESET)
-	{
-		HSIStatus = (uint32_t)0x01;
-	}
-	else
-	{
-		HSIStatus = (uint32_t)0x00;
-	}  
 	
-	if (HSIStatus == (uint32_t)0x01)
+	/* Wait till HSI is ready and if Time out is reached exit */
+	while( !(RCC->CR&RCC_CR_HSIRDY) ){
+    		if(++StartUpCounter > STARTUP_TIMEOUT)
+      			clockFailure();
+  	}
+	/* Flash wait state */
+	ACRreg = FLASH->ACR;
+	ACRreg &= (uint32_t)((uint32_t)~FLASH_ACR_LATENCY);
+	FLASH->ACR = (uint32_t)(FLASH_Latency_0|ACRreg);	
+
+	RCCHCLKReg = RCC->CFGR;
+	RCCHCLKReg &= (uint32_t)((uint32_t)~RCC_CFGR_HPRE_Msk);
+	/* HCLK = SYSCLK */
+	RCC->CFGR = (uint32_t)(RCC_CFGR_HPRE_DIV4|RCCHCLKReg);
+
+	RCCPCLKReg = RCC->CFGR;
+	RCCPCLKReg &= (uint32_t)((uint32_t)~RCC_CFGR_PPRE_Msk);
+	/* PCLK = HCLK */
+	RCC->CFGR = (uint32_t)(RCC_CFGR_PPRE_DIV1|RCCPCLKReg);
+
+	/* Select HSI as system clock source */
+	RCC->CFGR &= (uint32_t)((uint32_t)~(RCC_CFGR_SW));
+	RCC->CFGR |= (uint32_t)RCC_CFGR_SW_HSI;    
+
+	/* Wait till HSI is used as system clock source */
+	while ((RCC->CFGR & (uint32_t)RCC_CFGR_SWS) != RCC_CFGR_SWS_HSI)
 	{
-
-		/* Flash wait state */
-		ACRreg = FLASH->ACR;
-		ACRreg &= (uint32_t)((uint32_t)~FLASH_ACR_LATENCY);
-		FLASH->ACR = (uint32_t)(FLASH_Latency_0|ACRreg);	
-
-		RCCHCLKReg = RCC->CFGR;
-		RCCHCLKReg &= (uint32_t)((uint32_t)~RCC_CFGR_HPRE_Msk);
-		/* HCLK = SYSCLK */
-		RCC->CFGR = (uint32_t)(RCC_CFGR_HPRE_DIV4|RCCHCLKReg);
-
-		RCCPCLKReg = RCC->CFGR;
-		RCCPCLKReg &= (uint32_t)((uint32_t)~RCC_CFGR_PPRE_Msk);
-		/* PCLK = HCLK */
-		RCC->CFGR = (uint32_t)(RCC_CFGR_PPRE_DIV1|RCCPCLKReg);
-
-		/* Select HSI as system clock source */
-		RCC->CFGR &= (uint32_t)((uint32_t)~(RCC_CFGR_SW));
-		RCC->CFGR |= (uint32_t)RCC_CFGR_SW_HSI;    
-
-		/* Wait till HSI is used as system clock source */
-		while ((RCC->CFGR & (uint32_t)RCC_CFGR_SWS) != RCC_CFGR_SWS_HSI)
-		{
-		}
 	}
-	else
-	{ /* If fails to start-up, the application will have wrong clock configuration. User can add here some code to deal with this error */
-	}  
 }
+
 #elif(SYSCLK_SOURCE == SYSCLK_SRC_HSI16M)
 static void SetSysClockToHSI_16M(void)
 {
-	__IO uint32_t StartUpCounter = 0, HSIStatus = 0;
+	__IO uint32_t StartUpCounter = 0
 	__IO uint32_t ACRreg = 0;	
 	__IO uint32_t RCCHCLKReg = 0;	
 	__IO uint32_t RCCPCLKReg = 0;
 	/* Enable HSI */
-    RCC->CR |= RCC_CR_HSION;
+	RCC->CR |= RCC_CR_HSION;
 
 	RCC->CFGR4 &= ~RCC_RCC_CFGR4_FLITFCLK_PRE;
 	RCC->CFGR4 |= (((uint32_t)0x07) << RCC_RCC_CFGR4_FLITFCLK_PRE_Pos);
-	/* Wait till HSI is ready and if Time out is reached exit */
-	do{
-		HSIStatus = RCC->CR & RCC_CR_HSIRDY;
-		StartUpCounter++;  
-	} while((HSIStatus == 0) && (StartUpCounter != STARTUP_TIMEOUT));
-
-	if ((RCC->CR & RCC_CR_HSIRDY) != RESET)
-	{
-		HSIStatus = (uint32_t)0x01;
-	}
-	else
-	{
-		HSIStatus = (uint32_t)0x00;
-	}  
 	
-	if (HSIStatus == (uint32_t)0x01)
+	/* Wait till HSI is ready and if Time out is reached exit */
+	while( !(RCC->CR&RCC_CR_HSIRDY) ){
+    		if(++StartUpCounter > STARTUP_TIMEOUT)
+      			clockFailure();
+  	}
+	/* Flash wait state */
+	ACRreg = FLASH->ACR;
+	ACRreg &= (uint32_t)((uint32_t)~FLASH_ACR_LATENCY);
+	FLASH->ACR = (uint32_t)(FLASH_Latency_0|ACRreg);	
+
+	RCCHCLKReg = RCC->CFGR;
+	RCCHCLKReg &= (uint32_t)((uint32_t)~RCC_CFGR_HPRE_Msk);
+	/* HCLK = SYSCLK */
+	RCC->CFGR = (uint32_t)(RCC_CFGR_HPRE_DIV2|RCCHCLKReg);
+
+	RCCPCLKReg = RCC->CFGR;
+	RCCPCLKReg &= (uint32_t)((uint32_t)~RCC_CFGR_PPRE_Msk);
+	/* PCLK = HCLK */
+	RCC->CFGR = (uint32_t)(RCC_CFGR_PPRE_DIV1|RCCPCLKReg);
+
+	/* Select HSI as system clock source */
+	RCC->CFGR &= (uint32_t)((uint32_t)~(RCC_CFGR_SW));
+	RCC->CFGR |= (uint32_t)RCC_CFGR_SW_HSI;    
+
+	/* Wait till HSI is used as system clock source */
+	while ((RCC->CFGR & (uint32_t)RCC_CFGR_SWS) != RCC_CFGR_SWS_HSI)
 	{
-
-		/* Flash wait state */
-		ACRreg = FLASH->ACR;
-		ACRreg &= (uint32_t)((uint32_t)~FLASH_ACR_LATENCY);
-		FLASH->ACR = (uint32_t)(FLASH_Latency_0|ACRreg);	
-
-		RCCHCLKReg = RCC->CFGR;
-		RCCHCLKReg &= (uint32_t)((uint32_t)~RCC_CFGR_HPRE_Msk);
-		/* HCLK = SYSCLK */
-		RCC->CFGR = (uint32_t)(RCC_CFGR_HPRE_DIV2|RCCHCLKReg);
-
-		RCCPCLKReg = RCC->CFGR;
-		RCCPCLKReg &= (uint32_t)((uint32_t)~RCC_CFGR_PPRE_Msk);
-		/* PCLK = HCLK */
-		RCC->CFGR = (uint32_t)(RCC_CFGR_PPRE_DIV1|RCCPCLKReg);
-
-		/* Select HSI as system clock source */
-		RCC->CFGR &= (uint32_t)((uint32_t)~(RCC_CFGR_SW));
-		RCC->CFGR |= (uint32_t)RCC_CFGR_SW_HSI;    
-
-		/* Wait till HSI is used as system clock source */
-		while ((RCC->CFGR & (uint32_t)RCC_CFGR_SWS) != RCC_CFGR_SWS_HSI)
-		{
-		}
-	}
-	else
-	{ /* If fails to start-up, the application will have wrong clock configuration. User can add here some code to deal with this error */
-	}  	
+	}	
 }
 #elif(SYSCLK_SOURCE == SYSCLK_SRC_HSI32M)
 static void SetSysClockToHSI_32M(void)
 {
-	__IO uint32_t StartUpCounter = 0, HSIStatus = 0;
+	__IO uint32_t StartUpCounter = 0;
 	__IO uint32_t ACRreg = 0;	
 	__IO uint32_t RCCHCLKReg = 0;	
 	__IO uint32_t RCCPCLKReg = 0;
 	/* Enable HSI */
-    RCC->CR |= RCC_CR_HSION;
+    	RCC->CR |= RCC_CR_HSION;
     
 	RCC->CFGR4 &= ~RCC_RCC_CFGR4_FLITFCLK_PRE;
 	RCC->CFGR4 |= (((uint32_t)0x07) << RCC_RCC_CFGR4_FLITFCLK_PRE_Pos);
 
-	/* Wait till HSI is ready and if Time out is reached exit */
-	do{
-		HSIStatus = RCC->CR & RCC_CR_HSIRDY;
-		StartUpCounter++;  
-	} while((HSIStatus == 0) && (StartUpCounter != STARTUP_TIMEOUT));
+	/* Wait till HSI is ready and if Time out is reached exit */	
+	while( !(RCC->CR&RCC_CR_HSIRDY) ){
+    		if(++StartUpCounter > STARTUP_TIMEOUT)
+      			clockFailure();
+  	}
+	/* Flash wait state */
+	ACRreg = FLASH->ACR;
+	ACRreg &= (uint32_t)((uint32_t)~FLASH_ACR_LATENCY);
+	FLASH->ACR = (uint32_t)(FLASH_Latency_1|ACRreg);	
 
-	if ((RCC->CR & RCC_CR_HSIRDY) != RESET)
+
+	RCCHCLKReg = RCC->CFGR;
+	RCCHCLKReg &= (uint32_t)((uint32_t)~RCC_CFGR_HPRE_Msk);
+	/* HCLK = SYSCLK */
+	RCC->CFGR = (uint32_t)(RCC_CFGR_HPRE_DIV1|RCCHCLKReg);
+
+	RCCPCLKReg = RCC->CFGR;
+	RCCPCLKReg &= (uint32_t)((uint32_t)~RCC_CFGR_PPRE_Msk);
+	/* PCLK = HCLK */
+	RCC->CFGR = (uint32_t)(RCC_CFGR_PPRE_DIV1|RCCPCLKReg);
+
+	/* Select HSI as system clock source */
+	RCC->CFGR &= (uint32_t)((uint32_t)~(RCC_CFGR_SW));
+	RCC->CFGR |= (uint32_t)RCC_CFGR_SW_HSI;    
+
+	/* Wait till HSI is used as system clock source */
+	while ((RCC->CFGR & (uint32_t)RCC_CFGR_SWS) != RCC_CFGR_SWS_HSI)
 	{
-		HSIStatus = (uint32_t)0x01;
-	}
-	else
-	{
-		HSIStatus = (uint32_t)0x00;
-	}  
-	
-	if (HSIStatus == (uint32_t)0x01)
-	{
-
-		/* Flash wait state */
-		ACRreg = FLASH->ACR;
-		ACRreg &= (uint32_t)((uint32_t)~FLASH_ACR_LATENCY);
-		FLASH->ACR = (uint32_t)(FLASH_Latency_1|ACRreg);	
-
-
-		RCCHCLKReg = RCC->CFGR;
-		RCCHCLKReg &= (uint32_t)((uint32_t)~RCC_CFGR_HPRE_Msk);
-		/* HCLK = SYSCLK */
-		RCC->CFGR = (uint32_t)(RCC_CFGR_HPRE_DIV1|RCCHCLKReg);
-
-		RCCPCLKReg = RCC->CFGR;
-		RCCPCLKReg &= (uint32_t)((uint32_t)~RCC_CFGR_PPRE_Msk);
-		/* PCLK = HCLK */
-		RCC->CFGR = (uint32_t)(RCC_CFGR_PPRE_DIV1|RCCPCLKReg);
-
-		/* Select HSI as system clock source */
-		RCC->CFGR &= (uint32_t)((uint32_t)~(RCC_CFGR_SW));
-		RCC->CFGR |= (uint32_t)RCC_CFGR_SW_HSI;    
-
-		/* Wait till HSI is used as system clock source */
-		while ((RCC->CFGR & (uint32_t)RCC_CFGR_SWS) != RCC_CFGR_SWS_HSI)
-		{
-		}
-	}
-	else
-	{ /* If fails to start-up, the application will have wrong clock configuration. User can add here some code to deal with this error */
-	}  	
+	}	
 }; 		
+
 #elif(SYSCLK_SOURCE == SYSCLK_SRC_LSI)
 static void SetSysClockToLSI(void)
 {
-	__IO uint32_t StartUpCounter = 0, LSIStatus = 0;
+	__IO uint32_t StartUpCounter = 0;
 	
 	/* Enable LSI */
-    RCC->CSR |= RCC_CSR_LSION;
+    	RCC->CSR |= RCC_CSR_LSION;	
 
-	/* Wait till LSI is ready and if Time out is reached exit */
-	do{
-		LSIStatus = RCC->CSR & RCC_CSR_LSIRDY;
-		StartUpCounter++;  
-	} while((LSIStatus == 0) && (StartUpCounter != STARTUP_TIMEOUT));
+	/* Wait till LSI is ready and if Time out is reached exit */	
+	while( !(RCC->CSR&RCC_CSR_LSIRDY) ){
+    		if(++StartUpCounter > STARTUP_TIMEOUT)
+      			clockFailure();
+  	}
+	/* Flash wait state */
+	FLASH->ACR &= (uint32_t)((uint32_t)~FLASH_ACR_LATENCY);
+	FLASH->ACR |= (uint32_t)FLASH_Latency_0;	
 
-	if ((RCC->CSR & RCC_CSR_LSIRDY) != RESET)
+	/* HCLK = SYSCLK */
+	RCC->CFGR |= (uint32_t)RCC_CFGR_HPRE_DIV1;
+
+	/* PCLK = HCLK */
+	RCC->CFGR |= (uint32_t)RCC_CFGR_PPRE_DIV1;
+
+	/* Select HSI as system clock source */
+	RCC->CFGR &= (uint32_t)((uint32_t)~(RCC_CFGR_SW));
+	RCC->CFGR |= (uint32_t)RCC_CFGR_SW_LSI;    
+
+	/* Wait till LSI is used as system clock source */
+	while ((RCC->CFGR & (uint32_t)RCC_CFGR_SWS) != RCC_CFGR_SWS_LSI)
 	{
-		LSIStatus = (uint32_t)0x01;
 	}
-	else
-	{
-		LSIStatus = (uint32_t)0x00;
-	}  
-	
-	if (LSIStatus == (uint32_t)0x01)
-	{
-
-		/* Flash wait state */
-		FLASH->ACR &= (uint32_t)((uint32_t)~FLASH_ACR_LATENCY);
-		FLASH->ACR |= (uint32_t)FLASH_Latency_0;	
-
-		/* HCLK = SYSCLK */
-		RCC->CFGR |= (uint32_t)RCC_CFGR_HPRE_DIV1;
-
-		/* PCLK = HCLK */
-		RCC->CFGR |= (uint32_t)RCC_CFGR_PPRE_DIV1;
-
-		/* Select HSI as system clock source */
-		RCC->CFGR &= (uint32_t)((uint32_t)~(RCC_CFGR_SW));
-		RCC->CFGR |= (uint32_t)RCC_CFGR_SW_LSI;    
-
-		/* Wait till LSI is used as system clock source */
-		while ((RCC->CFGR & (uint32_t)RCC_CFGR_SWS) != RCC_CFGR_SWS_LSI)
-		{
-		}
-
-	}
-	else
-	{ /* If fails to start-up, the application will have wrong clock configuration. User can add here some code to deal with this error */
-	}  	
 }; 	
 #elif(SYSCLK_SOURCE == SYSCLK_SCR_EXTCLK_IO)
 static void SetSysClockToEXTCLK(void)
 {
-	__IO uint32_t StartUpCounter = 0, EXTCLKStatus = 0;
+	__IO uint32_t StartUpCounter = 0;
 	__IO uint32_t ACRreg = 0;
 	__IO uint32_t RCCHCLKReg = 0;	
 	__IO uint32_t RCCPCLKReg = 0;
@@ -407,67 +347,49 @@ static void SetSysClockToEXTCLK(void)
 	// GPIO_Init(GPIOC, &GPIO_InitStructure);
 
 	/*CLOCK select */
-    RCC->CFGR4 &= (uint32_t)~(RCC_RCC_CFGR4_EXTCLK_SEL);
-    RCC->CFGR4 |= (uint32_t)RCC_CFGR4_EXTCLK_SEL_PA1;  
+    	RCC->CFGR4 &= (uint32_t)~(RCC_RCC_CFGR4_EXTCLK_SEL);
+    	RCC->CFGR4 |= (uint32_t)RCC_CFGR4_EXTCLK_SEL_PA1;  
 	// RCC->CFGR4 |= (uint32_t)RCC_CFGR4_EXTCLK_SEL_PB5;  
 	// RCC->CFGR4 |= (uint32_t)RCC_CFGR4_EXTCLK_SEL_PC5;  
 	// RCC->CFGR4 |= (uint32_t)RCC_CFGR4_EXTCLK_SEL_PD7;  
 	/* Enable EXTCLK */
-    RCC->CR |= RCC_CR_EXTCLKON;
+    	RCC->CR |= RCC_CR_EXTCLKON;
 
-	/* Wait till LSI is ready and if Time out is reached exit */
-	do{
-		EXTCLKStatus = RCC->CR & RCC_CR_EXTCLKRDY;
-		StartUpCounter++;  
-	} while((EXTCLKStatus == 0) && (StartUpCounter != STARTUP_TIMEOUT));
+	/* Wait till EXT is ready and if Time out is reached exit */	
+	while( !(RCC->CR&RCC_CR_EXTCLKRDY) ){
+    		if(++StartUpCounter > STARTUP_TIMEOUT)
+      			clockFailure();
+  	}
+	/* Flash wait state */
+	ACRreg=	FLASH->ACR;
+	ACRreg &= (uint32_t)((uint32_t)~FLASH_ACR_LATENCY);
 
-	if ((RCC->CR & RCC_CR_EXTCLKRDY) != RESET)
-	{
-		EXTCLKStatus = (uint32_t)0x01;
-	}
+	if (SystemCoreClock <= 16000000)
+		FLASH->ACR = (uint32_t)(FLASH_Latency_0|ACRreg);
+	else if(SystemCoreClock <= 32000000)
+		FLASH->ACR = (uint32_t)(FLASH_Latency_1|ACRreg);
 	else
+		FLASH->ACR = (uint32_t)(FLASH_Latency_2|ACRreg);
+
+	RCCHCLKReg = RCC->CFGR;
+	RCCHCLKReg &= (uint32_t)((uint32_t)~RCC_CFGR_HPRE_Msk);
+	/* HCLK = SYSCLK */
+	RCC->CFGR = (uint32_t)(RCC_CFGR_HPRE_DIV1|RCCHCLKReg);
+
+	RCCPCLKReg = RCC->CFGR;
+	RCCPCLKReg &= (uint32_t)((uint32_t)~RCC_CFGR_PPRE_Msk);
+	/* PCLK = HCLK */
+	RCC->CFGR = (uint32_t)(RCC_CFGR_PPRE_DIV1|RCCPCLKReg);
+
+
+	/* Select EXTCLK as system clock source */
+	RCC->CFGR &= (uint32_t)((uint32_t)~(RCC_CFGR_SW));
+	RCC->CFGR |= (uint32_t)RCC_CFGR_SW_EXTCLK;    
+
+	/* Wait till EXTCLK is used as system clock source */
+	while ((RCC->CFGR & (uint32_t)RCC_CFGR_SWS) != RCC_CFGR_SWS_EXTCLK)
 	{
-		EXTCLKStatus = (uint32_t)0x00;
-	}  
-	
-	if (EXTCLKStatus == (uint32_t)0x01)
-	{
-
-		/* Flash wait state */
-		ACRreg=	FLASH->ACR;
-		ACRreg &= (uint32_t)((uint32_t)~FLASH_ACR_LATENCY);
-		
-		if (SystemCoreClock <= 16000000)
-			FLASH->ACR = (uint32_t)(FLASH_Latency_0|ACRreg);
-		else if(SystemCoreClock <= 32000000)
-			FLASH->ACR = (uint32_t)(FLASH_Latency_1|ACRreg);
-		else
-			FLASH->ACR = (uint32_t)(FLASH_Latency_2|ACRreg);
-
-
-		RCCHCLKReg = RCC->CFGR;
-		RCCHCLKReg &= (uint32_t)((uint32_t)~RCC_CFGR_HPRE_Msk);
-		/* HCLK = SYSCLK */
-		RCC->CFGR = (uint32_t)(RCC_CFGR_HPRE_DIV1|RCCHCLKReg);
-
-		RCCPCLKReg = RCC->CFGR;
-		RCCPCLKReg &= (uint32_t)((uint32_t)~RCC_CFGR_PPRE_Msk);
-		/* PCLK = HCLK */
-		RCC->CFGR = (uint32_t)(RCC_CFGR_PPRE_DIV1|RCCPCLKReg);
-
-
-		/* Select EXTCLK as system clock source */
-		RCC->CFGR &= (uint32_t)((uint32_t)~(RCC_CFGR_SW));
-		RCC->CFGR |= (uint32_t)RCC_CFGR_SW_EXTCLK;    
-
-		/* Wait till EXTCLK is used as system clock source */
-		while ((RCC->CFGR & (uint32_t)RCC_CFGR_SWS) != RCC_CFGR_SWS_EXTCLK)
-		{
-		}
-	}
-	else
-	{ /* If fails to start-up, the application will have wrong clock configuration. User can add here some code to deal with this error */
-	}  	
+	}	
 }; 	
 
 #endif
