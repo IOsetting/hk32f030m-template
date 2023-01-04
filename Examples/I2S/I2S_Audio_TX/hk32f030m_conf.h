@@ -94,8 +94,7 @@
   * @brief Uncomment the line below to expanse the "assert_param" macro in the 
   *         drivers code
   */
-	
-	
+
  //#define USE_FULL_ASSERT   (1U) 
 
 #ifdef  USE_FULL_ASSERT
@@ -113,7 +112,7 @@
 #else
   #define assert_param(expr) ((void)0U)
 #endif /* USE_FULL_ASSERT */    
-    
+
 #ifdef __cplusplus
 }
 #endif
