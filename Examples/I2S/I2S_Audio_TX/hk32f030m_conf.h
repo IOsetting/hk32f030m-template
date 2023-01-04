@@ -14,6 +14,14 @@
  extern "C" {
 #endif
 
+/* System clock selection  */
+
+//#define SYSCLK_SOURCE SYSCLK_SRC_HSI8M
+//#define SYSCLK_SOURCE SYSCLK_SRC_HSI16M
+#define SYSCLK_SOURCE SYSCLK_SRC_HSI32M
+//#define SYSCLK_SOURCE SYSCLK_SRC_LSI
+//#define SYSCLK_SOURCE SYSCLK_SRC_EXTCLK_IO
+
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 
@@ -60,43 +68,26 @@
   * @brief Include module's header file 
   */
 
- #include "hk32f030m_rcc.h"
-
- #include "hk32f030m_crc.h"
-
- #include "hk32f030m_exti.h"
-
- #include "hk32f030m_flash.h"
-
- #include "hk32f030m_gpio.h"
-
- #include "hk32f030m_misc.h"
-
  #include "hk32f030m_adc.h"
-
- #include "hk32f030m_syscfg.h"
-
+ #include "hk32f030m_awu.h"
+ #include "hk32f030m_beep.h"
+ #include "hk32f030m_crc.h"
  #include "hk32f030m_def.h"
-
+ #include "hk32f030m_dbgmcu.h"
+ #include "hk32f030m_exti.h"
+ #include "hk32f030m_flash.h"
+ #include "hk32f030m_gpio.h"
  #include "hk32f030m_i2c.h"
-
  #include "hk32f030m_iwdg.h"
-
+ #include "hk32f030m_misc.h"
  #include "hk32f030m_pwr.h"
-
+ #include "hk32f030m_rcc.h"
  #include "hk32f030m_spi.h"
-
+ #include "hk32f030m_syscfg.h"
  #include "hk32f030m_tim.h"
-
  #include "hk32f030m_usart.h"
-
- #include "hk32f030m_iwdg.h"
-
  #include "hk32f030m_wwdg.h"
 
- #include "hk32f030m_awu.h"
- 
- #include "hk32f030m_beep.h"
 /* Exported macro ------------------------------------------------------------*/
 /* ########################## Assert Selection ############################## */
 /**

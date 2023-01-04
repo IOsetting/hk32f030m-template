@@ -4,14 +4,14 @@
   * 
   *   This will play a short voice clip through speaker
   * 
-  *   HK32F030MF4P6    MAX98357A
-  *   PD3           -> BCLK
-  *   PD4           -> DIN
-  *   PA3           -> LRC
-  *                    GND  -> GND
-  *                    VIN  -> 3.3V
-  *                    +    -> speaker
-  *                    -    -> speaker
+  *   HK32F030MF4P6               MAX98357A
+  *   PD3(SPI1_SCK/I2S_CK)        -> BCLK
+  *   PD4(SPI1_MOSI/I2S_SD)       -> DIN
+  *   PA3(SPI1_NSS/I2S_WS)        -> LRC
+  *                               GND  -> GND
+  *                               VIN  -> 3.3V
+  *                               +    -> speaker
+  *                               -    -> speaker
   * 
   ******************************************************************************
   */ 
