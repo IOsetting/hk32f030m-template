@@ -14,6 +14,14 @@
  extern "C" {
 #endif
 
+/* System clock selection  */
+ 
+//#define SYSCLK_SOURCE SYSCLK_SRC_HSI8M
+//#define SYSCLK_SOURCE SYSCLK_SRC_HSI16M
+#define SYSCLK_SOURCE SYSCLK_SRC_HSI32M
+//#define SYSCLK_SOURCE SYSCLK_SRC_LSI
+//#define SYSCLK_SOURCE SYSCLK_SRC_EXTCLK_IO
+	 
 /* Exported types ------------------------------------------------------------*/
 /* Exported constants --------------------------------------------------------*/
 
