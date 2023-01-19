@@ -18,7 +18,7 @@ FLASH_PROGRM	?= jlink
 # path to gcc arm
 #ARM_TOOCHAIN 	?= /opt/gcc-arm/gcc-arm-11.2-2022.02-x86_64-arm-none-eabi/bin
 #ARM_TOOCHAIN 	?= /opt/gcc-arm/arm-gnu-toolchain-11.3.rel1-x86_64-arm-none-eabi/bin
-ARM_TOOCHAIN 	?= /opt/gcc-arm/arm-gnu-toolchain-12.2.mpacbti-bet1-x86_64-arm-none-eabi/bin
+ARM_TOOCHAIN 	?= /opt/gcc-arm/arm-gnu-toolchain-12.2.rel1-x86_64-arm-none-eabi/bin
 
 # path to JLinkExe
 JLINKEXE		?= /opt/SEGGER/JLink/JLinkExe
@@ -51,7 +51,7 @@ ADIRS	:= User
 AFILES	:= Libraries/CMSIS/HK32F030M/Source/startup_hk32f030mf4p6.s
 
 # Include paths
-INCLUDES	:= Libraries/CMSIS/CM0/Core \
+INCLUDES	:= Libraries/CMSIS/Core/Include \
 			Libraries/CMSIS/HK32F030M/Include \
 			Libraries/HK32F030M_Driver/inc \
 			Libraries/Debug \
