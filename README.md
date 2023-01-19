@@ -31,6 +31,7 @@
 ├── Libraries
 │   ├── CMSIS
 │   ├── Debug                   # SysTick delay and printf for debug
+│   ├── FreeRTOS                # FreeRTOS library
 │   ├── HK32F030M_Driver        # MCU peripheral driver
 │   └── LDScripts
 ├── LICENSE
@@ -116,6 +117,8 @@ BUILD_DIR 		= Build
 
 # Enable printf float %f support, y:yes, n:no
 ENABLE_PRINTF_FLOAT	?= n
+# Build with FreeRTOS, y:yes, n:no
+USE_FREERTOS	?= n
 # Programmer, jlink or pyocd
 FLASH_PROGRM	?= pyocd
 
