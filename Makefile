@@ -10,7 +10,7 @@ BUILD_DIR 		= Build
 # Enable printf float %f support, y:yes, n:no
 ENABLE_PRINTF_FLOAT	?= n
 # Build with FreeRTOS, y:yes, n:no
-USE_FREERTOS	?= y
+USE_FREERTOS	?= n
 # Programmer, jlink or pyocd
 FLASH_PROGRM	?= jlink
 
