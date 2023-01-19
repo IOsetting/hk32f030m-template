@@ -9,6 +9,8 @@ BUILD_DIR 		= Build
 
 # Enable printf float %f support, y:yes, n:no
 ENABLE_PRINTF_FLOAT	?= n
+# Build with FreeRTOS, y:yes, n:no
+USE_FREERTOS	?= y
 # Programmer, jlink or pyocd
 FLASH_PROGRM	?= jlink
 
@@ -51,10 +53,20 @@ ADIRS	:= User
 AFILES	:= Libraries/CMSIS/HK32F030M/Source/startup_hk32f030mf4p6.s
 
 # Include paths
-INCLUDES	:= Libraries/CMSIS/Core/Include \
+INCLUDES	:= User \
+			Libraries/CMSIS/Core/Include \
 			Libraries/CMSIS/HK32F030M/Include \
 			Libraries/HK32F030M_Driver/inc \
-			Libraries/Debug \
-			User
+			Libraries/Debug
+
+ifeq ($(USE_FREERTOS),y)
+CDIRS		+= Libraries/FreeRTOS \
+			Libraries/FreeRTOS/portable/GCC/ARM_CM0
+
+CFILES		+= Libraries/FreeRTOS/portable/MemMang/heap_4.c
+
+INCLUDES	+= Libraries/FreeRTOS/include \
+			Libraries/FreeRTOS/portable/GCC/ARM_CM0
+endif
 
 include ./rules.mk
