@@ -2039,81 +2039,82 @@ typedef struct
 #define GPIO_OSPEEDR_OSPEEDR0_Msk       (0x3U << GPIO_OSPEEDR_OSPEEDR0_Pos)    /*!< 0x00000003 */
 #define GPIO_OSPEEDR_OSPEEDR0           GPIO_OSPEEDR_OSPEEDR0_Msk              
 #define GPIO_OSPEEDR_OSPEEDR0_0         (0x1U << GPIO_OSPEEDR_OSPEEDR0_Pos)    /*!< 0x00000001 */
-
+#define GPIO_OSPEEDR_OSPEEDR0_1         (0x2U << GPIO_OSPEEDR_OSPEEDR0_Pos)    /*!< 0x00000002 */
 #define GPIO_OSPEEDR_OSPEEDR1_Pos       (2U)                                   
 #define GPIO_OSPEEDR_OSPEEDR1_Msk       (0x3U << GPIO_OSPEEDR_OSPEEDR1_Pos)    /*!< 0x0000000C */
 #define GPIO_OSPEEDR_OSPEEDR1           GPIO_OSPEEDR_OSPEEDR1_Msk              
 #define GPIO_OSPEEDR_OSPEEDR1_0         (0x1U << GPIO_OSPEEDR_OSPEEDR1_Pos)    /*!< 0x00000004 */
-
+#define GPIO_OSPEEDR_OSPEEDR1_1         (0x2U << GPIO_OSPEEDR_OSPEEDR1_Pos)    /*!< 0x00000008 */
 #define GPIO_OSPEEDR_OSPEEDR2_Pos       (4U)                                   
 #define GPIO_OSPEEDR_OSPEEDR2_Msk       (0x3U << GPIO_OSPEEDR_OSPEEDR2_Pos)    /*!< 0x00000030 */
 #define GPIO_OSPEEDR_OSPEEDR2           GPIO_OSPEEDR_OSPEEDR2_Msk              
 #define GPIO_OSPEEDR_OSPEEDR2_0         (0x1U << GPIO_OSPEEDR_OSPEEDR2_Pos)    /*!< 0x00000010 */
-
+#define GPIO_OSPEEDR_OSPEEDR2_1         (0x2U << GPIO_OSPEEDR_OSPEEDR2_Pos)    /*!< 0x00000020 */
 #define GPIO_OSPEEDR_OSPEEDR3_Pos       (6U)                                   
 #define GPIO_OSPEEDR_OSPEEDR3_Msk       (0x3U << GPIO_OSPEEDR_OSPEEDR3_Pos)    /*!< 0x000000C0 */
 #define GPIO_OSPEEDR_OSPEEDR3           GPIO_OSPEEDR_OSPEEDR3_Msk              
 #define GPIO_OSPEEDR_OSPEEDR3_0         (0x1U << GPIO_OSPEEDR_OSPEEDR3_Pos)    /*!< 0x00000040 */
-
+#define GPIO_OSPEEDR_OSPEEDR3_1         (0x2U << GPIO_OSPEEDR_OSPEEDR3_Pos)    /*!< 0x00000080 */
 #define GPIO_OSPEEDR_OSPEEDR4_Pos       (8U)                                   
 #define GPIO_OSPEEDR_OSPEEDR4_Msk       (0x3U << GPIO_OSPEEDR_OSPEEDR4_Pos)    /*!< 0x00000300 */
 #define GPIO_OSPEEDR_OSPEEDR4           GPIO_OSPEEDR_OSPEEDR4_Msk              
 #define GPIO_OSPEEDR_OSPEEDR4_0         (0x1U << GPIO_OSPEEDR_OSPEEDR4_Pos)    /*!< 0x00000100 */
-
+#define GPIO_OSPEEDR_OSPEEDR4_1         (0x2U << GPIO_OSPEEDR_OSPEEDR4_Pos)    /*!< 0x00000200 */
 #define GPIO_OSPEEDR_OSPEEDR5_Pos       (10U)                                  
 #define GPIO_OSPEEDR_OSPEEDR5_Msk       (0x3U << GPIO_OSPEEDR_OSPEEDR5_Pos)    /*!< 0x00000C00 */
 #define GPIO_OSPEEDR_OSPEEDR5           GPIO_OSPEEDR_OSPEEDR5_Msk              
 #define GPIO_OSPEEDR_OSPEEDR5_0         (0x1U << GPIO_OSPEEDR_OSPEEDR5_Pos)    /*!< 0x00000400 */
-
+#define GPIO_OSPEEDR_OSPEEDR5_1         (0x2U << GPIO_OSPEEDR_OSPEEDR5_Pos)    /*!< 0x00000800 */
 #define GPIO_OSPEEDR_OSPEEDR6_Pos       (12U)                                  
 #define GPIO_OSPEEDR_OSPEEDR6_Msk       (0x3U << GPIO_OSPEEDR_OSPEEDR6_Pos)    /*!< 0x00003000 */
 #define GPIO_OSPEEDR_OSPEEDR6           GPIO_OSPEEDR_OSPEEDR6_Msk              
 #define GPIO_OSPEEDR_OSPEEDR6_0         (0x1U << GPIO_OSPEEDR_OSPEEDR6_Pos)    /*!< 0x00001000 */
-
+#define GPIO_OSPEEDR_OSPEEDR6_1         (0x2U << GPIO_OSPEEDR_OSPEEDR6_Pos)    /*!< 0x00002000 */
 #define GPIO_OSPEEDR_OSPEEDR7_Pos       (14U)                                  
 #define GPIO_OSPEEDR_OSPEEDR7_Msk       (0x3U << GPIO_OSPEEDR_OSPEEDR7_Pos)    /*!< 0x0000C000 */
 #define GPIO_OSPEEDR_OSPEEDR7           GPIO_OSPEEDR_OSPEEDR7_Msk              
 #define GPIO_OSPEEDR_OSPEEDR7_0         (0x1U << GPIO_OSPEEDR_OSPEEDR7_Pos)    /*!< 0x00004000 */
-
+#define GPIO_OSPEEDR_OSPEEDR7_1         (0x2U << GPIO_OSPEEDR_OSPEEDR7_Pos)    /*!< 0x00008000 */
 #define GPIO_OSPEEDR_OSPEEDR8_Pos       (16U)                                  
 #define GPIO_OSPEEDR_OSPEEDR8_Msk       (0x3U << GPIO_OSPEEDR_OSPEEDR8_Pos)    /*!< 0x00030000 */
 #define GPIO_OSPEEDR_OSPEEDR8           GPIO_OSPEEDR_OSPEEDR8_Msk              
 #define GPIO_OSPEEDR_OSPEEDR8_0         (0x1U << GPIO_OSPEEDR_OSPEEDR8_Pos)    /*!< 0x00010000 */
-
+#define GPIO_OSPEEDR_OSPEEDR8_1         (0x2U << GPIO_OSPEEDR_OSPEEDR8_Pos)    /*!< 0x00020000 */
 #define GPIO_OSPEEDR_OSPEEDR9_Pos       (18U)                                  
 #define GPIO_OSPEEDR_OSPEEDR9_Msk       (0x3U << GPIO_OSPEEDR_OSPEEDR9_Pos)    /*!< 0x000C0000 */
 #define GPIO_OSPEEDR_OSPEEDR9           GPIO_OSPEEDR_OSPEEDR9_Msk              
 #define GPIO_OSPEEDR_OSPEEDR9_0         (0x1U << GPIO_OSPEEDR_OSPEEDR9_Pos)    /*!< 0x00040000 */
-
+#define GPIO_OSPEEDR_OSPEEDR9_1         (0x2U << GPIO_OSPEEDR_OSPEEDR9_Pos)    /*!< 0x00080000 */
 #define GPIO_OSPEEDR_OSPEEDR10_Pos      (20U)                                  
 #define GPIO_OSPEEDR_OSPEEDR10_Msk      (0x3U << GPIO_OSPEEDR_OSPEEDR10_Pos)   /*!< 0x00300000 */
 #define GPIO_OSPEEDR_OSPEEDR10          GPIO_OSPEEDR_OSPEEDR10_Msk             
 #define GPIO_OSPEEDR_OSPEEDR10_0        (0x1U << GPIO_OSPEEDR_OSPEEDR10_Pos)   /*!< 0x00100000 */
-
+#define GPIO_OSPEEDR_OSPEEDR10_1        (0x2U << GPIO_OSPEEDR_OSPEEDR10_Pos)   /*!< 0x00200000 */
 #define GPIO_OSPEEDR_OSPEEDR11_Pos      (22U)                                  
 #define GPIO_OSPEEDR_OSPEEDR11_Msk      (0x3U << GPIO_OSPEEDR_OSPEEDR11_Pos)   /*!< 0x00C00000 */
 #define GPIO_OSPEEDR_OSPEEDR11          GPIO_OSPEEDR_OSPEEDR11_Msk             
 #define GPIO_OSPEEDR_OSPEEDR11_0        (0x1U << GPIO_OSPEEDR_OSPEEDR11_Pos)   /*!< 0x00400000 */
-
+#define GPIO_OSPEEDR_OSPEEDR11_1        (0x2U << GPIO_OSPEEDR_OSPEEDR11_Pos)   /*!< 0x00800000 */
 #define GPIO_OSPEEDR_OSPEEDR12_Pos      (24U)                                  
 #define GPIO_OSPEEDR_OSPEEDR12_Msk      (0x3U << GPIO_OSPEEDR_OSPEEDR12_Pos)   /*!< 0x03000000 */
 #define GPIO_OSPEEDR_OSPEEDR12          GPIO_OSPEEDR_OSPEEDR12_Msk             
 #define GPIO_OSPEEDR_OSPEEDR12_0        (0x1U << GPIO_OSPEEDR_OSPEEDR12_Pos)   /*!< 0x01000000 */
-
+#define GPIO_OSPEEDR_OSPEEDR12_1        (0x2U << GPIO_OSPEEDR_OSPEEDR12_Pos)   /*!< 0x02000000 */
 #define GPIO_OSPEEDR_OSPEEDR13_Pos      (26U)                                  
 #define GPIO_OSPEEDR_OSPEEDR13_Msk      (0x3U << GPIO_OSPEEDR_OSPEEDR13_Pos)   /*!< 0x0C000000 */
 #define GPIO_OSPEEDR_OSPEEDR13          GPIO_OSPEEDR_OSPEEDR13_Msk             
 #define GPIO_OSPEEDR_OSPEEDR13_0        (0x1U << GPIO_OSPEEDR_OSPEEDR13_Pos)   /*!< 0x04000000 */
-
+#define GPIO_OSPEEDR_OSPEEDR13_1        (0x2U << GPIO_OSPEEDR_OSPEEDR13_Pos)   /*!< 0x08000000 */
 #define GPIO_OSPEEDR_OSPEEDR14_Pos      (28U)                                  
 #define GPIO_OSPEEDR_OSPEEDR14_Msk      (0x3U << GPIO_OSPEEDR_OSPEEDR14_Pos)   /*!< 0x30000000 */
 #define GPIO_OSPEEDR_OSPEEDR14          GPIO_OSPEEDR_OSPEEDR14_Msk             
 #define GPIO_OSPEEDR_OSPEEDR14_0        (0x1U << GPIO_OSPEEDR_OSPEEDR14_Pos)   /*!< 0x10000000 */
-
+#define GPIO_OSPEEDR_OSPEEDR14_1        (0x2U << GPIO_OSPEEDR_OSPEEDR14_Pos)   /*!< 0x20000000 */
 #define GPIO_OSPEEDR_OSPEEDR15_Pos      (30U)                                  
 #define GPIO_OSPEEDR_OSPEEDR15_Msk      (0x3U << GPIO_OSPEEDR_OSPEEDR15_Pos)   /*!< 0xC0000000 */
 #define GPIO_OSPEEDR_OSPEEDR15          GPIO_OSPEEDR_OSPEEDR15_Msk             
 #define GPIO_OSPEEDR_OSPEEDR15_0        (0x1U << GPIO_OSPEEDR_OSPEEDR15_Pos)   /*!< 0x40000000 */
+#define GPIO_OSPEEDR_OSPEEDR15_1        (0x2U << GPIO_OSPEEDR_OSPEEDR15_Pos)   /*!< 0x80000000 */
 
 
 /*******************  Bit definition for GPIO_PUPDR register ******************/
@@ -3393,7 +3394,8 @@ by Rakan.zhang
 /*****************  Bit definition for SYSCFG_CFGR1 register  ****************/
 #define SYSCFG_CFGR1_MEM_MODE_Pos            (0U)                              
 #define SYSCFG_CFGR1_MEM_MODE_Msk            (0x3U << SYSCFG_CFGR1_MEM_MODE_Pos) /*!< 0x00000003 */
-#define SYSCFG_CFGR1_MEM_MODE                SYSCFG_CFGR1_MEM_MODE_Msk           /*!< SYSCFG_Memory Remap Config */ 
+#define SYSCFG_CFGR1_MEM_MODE                SYSCFG_CFGR1_MEM_MODE_Msk           /*!< SYSCFG_Memory Remap Config */
+#define SYSCFG_CFGR1_MEM_MODE_0              (0x1U << SYSCFG_CFGR1_MEM_MODE_Pos) /*!< 0x00000001 */
 #define SYSCFG_CFGR1_MEM_MODE_1              (0x2U << SYSCFG_CFGR1_MEM_MODE_Pos) /*!< 0x00000002 */
 
 #define SYSCFG_CFGR1_LOCKUP_LOCK_Pos         (31U)                             
