@@ -68,58 +68,44 @@ void PWR_EnterSleepMode(uint8_t PWR_Entry)
 }
 
 
-/**
-  * @brief  it will config LSI 128K as sysclk
-  * @retval None
-  * @note this fuction only used in fuction  PWR_EnterDeepSleepMode(uint8_t PWR_Entry)
-  */
-static void Sysclk_SwitchToLSI(void)
-{
-  RCC_LSICmd(ENABLE);
-  while(RCC_GetFlagStatus(RCC_FLAG_LSIRDY) == RESET);
-  
-  /* Flash wait state */
-  FLASH->ACR &= (uint32_t)((uint32_t)~FLASH_ACR_LATENCY);
-  FLASH->ACR |= (uint32_t)FLASH_Latency_0;  
-  
-  /* Select LSI as system clock source */
-  RCC->CFGR &= (uint32_t)((uint32_t)~(RCC_CFGR_SW));
-  RCC->CFGR |= (uint32_t)RCC_CFGR_SW_LSI; 
-  /* Wait till LSI is used as system clock source */
-  while ((RCC->CFGR & (uint32_t)RCC_CFGR_SWS) != RCC_CFGR_SWS_LSI);
-  
-  /* HCLK = SYSCLK */
-  RCC->CFGR |= (uint32_t)RCC_CFGR_HPRE_DIV1;
-
-  /* PCLK = HCLK */
-  RCC->CFGR |= (uint32_t)RCC_CFGR_PPRE_DIV1;
-  
-  // config the Flash Erase and program time
-  RCC->CFGR4 |= RCC_RCC_CFGR4_FLITFCLK_PRE;
-  RCC->CFGR4 &= ~(((uint32_t)0x0F) << RCC_RCC_CFGR4_FLITFCLK_PRE_Pos);
-  
-  /* Close HSI */
-  RCC_HSICmd(DISABLE);
-
-}
 
 /**
-  * @brief  Enters DeepSleep mode. it will config LSI 128K as sysclk
+  * @brief  Enters DeepSleep mode. It will config LSI 128K as sysclk, then resume the previous oscillator.
   * @param  PWR_Entry: specifies if Sleep mode in entered with WFI or WFE instruction.
   *   This parameter can be one of the following values:
   *     @arg PWR_Entry_WFI: enter Sleep mode with WFI instruction
   *     @arg PWR_Entry_WFE: enter Sleep mode with WFE instruction
   * @retval None
+  *
   */
 void PWR_EnterDeepSleepMode(uint8_t PWR_Entry)
 {
   /* Check the parameters */
   assert_param(IS_PWR_ENTRY(PWR_Entry));
-  /* set sysclk  to LSI */
-  Sysclk_SwitchToLSI();
-  /* enter sleep mode  */
-  PWR_EnterSleepMode(PWR_Entry);
+
+  uint32_t clockMode = RCC_GetSYSCLKSource();                           /* Get current clock source */
+  uint32_t ext_sel = READ_BIT(RCC->CFGR4, RCC_RCC_CFGR4_EXTCLK_SEL);    /* Backup extclk sel value */
+
+  if(clockMode != RCC_CFGR_SWS_LSI){                                    /* If not in LSI, switch clock. */
+    MODIFY_REG(RCC->CFGR, RCC_CFGR_SW, RCC_CFGR_SW_LSI);                /* Select LSI as system clock source */
+    while ((RCC->CFGR & (uint32_t)RCC_CFGR_SWS) != RCC_CFGR_SWS_LSI);   /* Wait till LSI is used as system clock source */
+    
+    if(clockMode == RCC_CFGR_SWS_HSI)
+      RCC_HSICmd(DISABLE);                                              /* Disable HSI */
+    else if(clockMode == RCC_CFGR_SWS_EXTCLK)
+      RCC_EXTCmd(DISABLE, ext_sel);                                     /* Disable EXTCLK */    
+  }
+  PWR_EnterSleepMode(PWR_Entry);                                        /* Enter sleep mode */                                                                        
+  
+  if(clockMode == RCC_CFGR_SWS_HSI)                                     /* Woke up, resume clock */
+    RCC_HSICmd(ENABLE);                                                 /* Enable HSI */
+  else if(clockMode == RCC_CFGR_SWS_EXTCLK)
+    RCC_EXTCmd(ENABLE, ext_sel);                                        /* Enable EXTCLK */
+  
+  MODIFY_REG(RCC->CFGR, RCC_CFGR_SW, clockMode>>2 );                    /* Select previous system clock source */
+  while ((RCC->CFGR & (uint32_t)RCC_CFGR_SWS) != clockMode);            /* Wait till clock mode is used as system clock source */
 }
+
 
 
 /**
