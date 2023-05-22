@@ -28,6 +28,7 @@
 #define AWU_CR_RESET_VALUE 0x00000000U
 #define AWU_SR_RESET_VALUE 0x00000000U
 #define AWU_SR_BUSY        0x00000001U
+#define AWU_CR_RLR_WBUSY   0x80000000U
 
 typedef enum
 {

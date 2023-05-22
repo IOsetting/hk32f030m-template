@@ -24,8 +24,8 @@
   */
 void AWU_DeInit(void)
 {
-    AWU->CR = AWU_CR_RESET_VALUE;
-    AWU->SR = AWU_SR_RESET_VALUE;
+  RCC_APB1PeriphResetCmd(RCC_APB1Periph_AWU, ENABLE);
+  RCC_APB1PeriphResetCmd(RCC_APB1Periph_AWU, DISABLE);
 }
 
 /**
@@ -39,17 +39,9 @@ void AWU_DeInit(void)
   */
 void AWU_CLKConfig(AWU_CLK_TYPE eAWU_CLK)
 {
-    uint32_t temp = 0;
     /* Check parameter */
     assert_param(IS_AWU_CLK(eAWU_CLK));
-
-    temp =  AWU->CR;
-    /*clear Bit AWU_CKSEL*/
-    temp &= 0xFFFFFFFE;
-    /* config AWU timer clk*/
-    temp |= eAWU_CLK;
-    /*set the register*/
-    AWU->CR |= temp;
+    MODIFY_REG(AWU->CR, 1, eAWU_CLK);
 }
 
 /**
@@ -60,31 +52,20 @@ void AWU_CLKConfig(AWU_CLK_TYPE eAWU_CLK)
   *       when awu_wbusy =1 ,the write operation on the awu-rlr register will be invalid.
   * @return ErrorStatus: the AWU result 
   *       SUCCESS:AWU timer start success
-  *       ERROR£ºAWU timer start error
+  *       ERROR:AWU timer start error
   */
 ErrorStatus AWU_TimerCounterAndStart(uint32_t TimerCounter)
 {
-    uint32_t temp = 0;
     uint32_t TimeoutCnt = 0;
-    while (TimeoutCnt ++ <= 0x0fff)
+    while (TimeoutCnt++ < 0x1000)
     {
-      //  AWU_APB bus is idle    
-      if ((AWU->CR & 0x80000000) == 0x00000000)
-      {
-        temp = AWU->CR;
-        temp &= 0xFF800001; 
-        temp |= ( TimerCounter << 1);
-        AWU->CR |= temp;
+      if(!(AWU->CR & AWU_CR_RLR_WBUSY)){                    /*  Proceed if  AWU bus idle  */
+        MODIFY_REG(AWU->CR, 0x7FFFFE, TimerCounter<<1);
+        while((AWU->CR & AWU_CR_RLR_WBUSY));                /*  Wait for AWU bus completion  */
         return SUCCESS;
       }
-      else
-      {
-        /* when awu_wbusy =1 ,the write operation on the awu-rlr register will be invalid.*/
-      }
     }
- 
-    return ERROR;
-      
+    return ERROR;                                           /*  AWU bus busy */
 }
 
 /**
