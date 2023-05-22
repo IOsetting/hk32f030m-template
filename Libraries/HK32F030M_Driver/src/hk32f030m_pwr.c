@@ -85,25 +85,31 @@ void PWR_EnterDeepSleepMode(uint8_t PWR_Entry)
 
   uint32_t clockMode = RCC_GetSYSCLKSource();                           /* Get current clock source */
   uint32_t ext_sel = READ_BIT(RCC->CFGR4, RCC_RCC_CFGR4_EXTCLK_SEL);    /* Backup extclk sel value */
+  uint8_t LSI_enabled = (RCC->CSR & RCC_CSR_LSION) && 1;
 
   if(clockMode != RCC_CFGR_SWS_LSI){                                    /* If not in LSI, switch clock. */
+
+    if(!LSI_enabled)                                                    /* Enable LSI if not already active */
+      RCC_LSICmd(ENABLE);
     MODIFY_REG(RCC->CFGR, RCC_CFGR_SW, RCC_CFGR_SW_LSI);                /* Select LSI as system clock source */
     while ((RCC->CFGR & (uint32_t)RCC_CFGR_SWS) != RCC_CFGR_SWS_LSI);   /* Wait till LSI is used as system clock source */
-    
     if(clockMode == RCC_CFGR_SWS_HSI)
       RCC_HSICmd(DISABLE);                                              /* Disable HSI */
     else if(clockMode == RCC_CFGR_SWS_EXTCLK)
-      RCC_EXTCmd(DISABLE, ext_sel);                                     /* Disable EXTCLK */    
+      RCC_EXTCmd(DISABLE, ext_sel);                                     /* Disable EXTCLK */
   }
-  PWR_EnterSleepMode(PWR_Entry);                                        /* Enter sleep mode */                                                                        
-  
+  PWR_EnterSleepMode(PWR_Entry);                                        /* Enter sleep mode */
+
   if(clockMode == RCC_CFGR_SWS_HSI)                                     /* Woke up, resume clock */
     RCC_HSICmd(ENABLE);                                                 /* Enable HSI */
   else if(clockMode == RCC_CFGR_SWS_EXTCLK)
     RCC_EXTCmd(ENABLE, ext_sel);                                        /* Enable EXTCLK */
-  
+
   MODIFY_REG(RCC->CFGR, RCC_CFGR_SW, clockMode>>2 );                    /* Select previous system clock source */
   while ((RCC->CFGR & (uint32_t)RCC_CFGR_SWS) != clockMode);            /* Wait till clock mode is used as system clock source */
+
+  if(!LSI_enabled)                                                      /* Disable LSI if not active before */
+    RCC_LSICmd(DISABLE);
 }
 
 
