@@ -345,10 +345,10 @@ FLASH_Status FLASH_OB_WRPConfig(uint32_t OB_WRP)
 	FLASH_Status status = FLASH_COMPLETE;
 
 	OB_WRP = (uint32_t)(~OB_WRP);
-	WRP0_Data = (uint16_t)(OB_WRP & OB_WRP0_WRP0);
-	WRP1_Data = (uint16_t)((OB_WRP >> 8) & OB_WRP0_WRP0);
-	WRP2_Data = (uint16_t)((OB_WRP >> 16) & OB_WRP0_WRP0) ;
-	WRP3_Data = (uint16_t)((OB_WRP >> 24) & OB_WRP0_WRP0) ;
+  WRP0_Data = (uint16_t)(~(OB_WRP >> 0)  & OB_WRP0_WRP0)<<8 | (uint16_t)((OB_WRP >> 0)  & OB_WRP0_WRP0);    // nWRP0, WRP0
+  WRP1_Data = (uint16_t)(~(OB_WRP >> 8)  & OB_WRP0_WRP0)<<8 | (uint16_t)((OB_WRP >> 8)  & OB_WRP0_WRP0);    // nWRP1, WRP1
+  WRP2_Data = (uint16_t)(~(OB_WRP >> 16) & OB_WRP0_WRP0)<<8 | (uint16_t)((OB_WRP >> 16) & OB_WRP0_WRP0);    // nWRP2, WRP2
+  WRP3_Data = (uint16_t)(~(OB_WRP >> 24) & OB_WRP0_WRP0)<<8 | (uint16_t)((OB_WRP >> 24) & OB_WRP0_WRP0);    // nWRP3, WRP4
 
 	/* Wait for last operation to be completed */
 	status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
@@ -370,43 +370,26 @@ FLASH_Status FLASH_OB_WRPConfig(uint32_t OB_WRP)
 	{
 
 		/* If the erase operation is completed, disable the OPTER Bit */
-    	FLASH->CR &= ~FLASH_CR_OPTER;    
-
+	  FLASH->CR &= ~FLASH_CR_OPTER;
 		FLASH->CR |= FLASH_CR_OPTPG;
 
-		if(WRP0_Data != 0xFF)
-		{
-			OB->WRP0 = WRP0_Data;
+    OB->WRP0 = WRP0_Data;
+    status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
 
-			/* Wait for last operation to be completed */
-			status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
-		}
-		if((status == FLASH_COMPLETE) && (WRP1_Data != 0xFF))
-		{
-			OB->WRP1 = WRP1_Data;
+    if(status == FLASH_COMPLETE){
+      OB->WRP1 = WRP1_Data;
+      status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    }
 
-			/* Wait for last operation to be completed */
-			status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
-		}
-		if((status == FLASH_COMPLETE) && (WRP2_Data != 0xFF))
-		{
-			OB->WRP2 = WRP2_Data;
+    if(status == FLASH_COMPLETE){
+      OB->WRP2 = WRP2_Data;
+      status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    }
 
-			/* Wait for last operation to be completed */
-			status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
-		}    
-		if((status == FLASH_COMPLETE) && (WRP3_Data != 0xFF))
-		{
-			OB->WRP3 = WRP3_Data;
-
-			/* Wait for last operation to be completed */
-			status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
-		}  
-		if(status != FLASH_TIMEOUT)
-		{
-			/* if the program operation is completed, disable the OPTPG Bit */
-			FLASH->CR &= ~FLASH_CR_OPTPG;
-		}
+    if(status == FLASH_COMPLETE){
+      OB->WRP3 = WRP3_Data;
+      status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
+    }
 	} 
 	/* Return the write protection operation Status */
 	return status;
@@ -461,7 +444,7 @@ FLASH_Status FLASH_OB_RDPConfig(uint8_t OB_RDP)
       /* Enable the Option Bytes Programming operation */
       FLASH->CR |= FLASH_CR_OPTPG;
        
-      OB->RDP = OB_RDP;
+      OB->RDP = (~OB_RDP&0xFF)<<8 | OB_RDP;   // nRDP, RDP
 
       /* Wait for last operation to be completed */
       status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT); 
@@ -537,7 +520,7 @@ FLASH_Status FLASH_OB_UserConfig(uint8_t OB_IWDG, uint8_t OB_STOP)
     /* Enable the Option Bytes Programming operation */
     FLASH->CR |= FLASH_CR_OPTPG; 
 
-    OB->USER = (uint16_t)((uint16_t)(OB_IWDG | OB_STOP));
+    OB->USER = (uint16_t)(~(OB_IWDG | OB_STOP)&0xFF)<<8 | (uint16_t)(OB_IWDG | OB_STOP);   //nUSER, USER
   
     /* Wait for last operation to be completed */
     status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
@@ -798,7 +781,7 @@ FLASH_Status FLASH_OB_ProgramData(uint32_t Address, uint16_t Data)
   {
     /* Enables the Option Bytes Programming operation */
     FLASH->CR |= FLASH_CR_OPTPG; 
-    *(__IO uint16_t*)Address = Data;
+    *(__IO uint16_t*)Address = (~Data&0xFF)<<8 | Data&0xFF;     // nDATA, DATA
     
     /* Wait for last operation to be completed */
     status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
