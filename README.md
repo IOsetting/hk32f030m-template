@@ -80,7 +80,7 @@ The default installation directory is */opt/SEGGER*
 Install from pip instead of apt repository because the version is 0.13.1+dfsg-1, which is too low to recognize J-Link probe
 
 ```bash
-pip uninstall pyocd
+pip install pyocd
 ```
 This will install PyOCD into:
 ```
