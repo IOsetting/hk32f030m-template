@@ -781,7 +781,7 @@ FLASH_Status FLASH_OB_ProgramData(uint32_t Address, uint16_t Data)
   {
     /* Enables the Option Bytes Programming operation */
     FLASH->CR |= FLASH_CR_OPTPG; 
-    *(__IO uint16_t*)Address = (~Data&0xFF)<<8 | Data&0xFF;     // nDATA, DATA
+    *(__IO uint16_t*)Address = (~Data&0xFF)<<8 | (Data&0xFF);     // nDATA, DATA
     
     /* Wait for last operation to be completed */
     status = FLASH_WaitForLastOperation(FLASH_ER_PRG_TIMEOUT);
